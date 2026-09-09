@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leonti Solutions — Engineering, AI &amp; Compliance Consultancy</title>
+<meta name="description" content="Leonti Solutions is a technology consultancy turning technical depth into business outcomes — solutions engineering, AI automation, product delivery and compliance-grade data systems.">
+<meta property="og:title" content="Leonti Solutions — Engineering, AI &amp; Compliance Consultancy">
+<meta property="og:description" content="We turn technical depth into business outcomes. Solutions engineering, AI automation, product delivery and compliance-grade data systems.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://leonti.solutions">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F172A;
+  --ink:#E2E8F0;
+  --dim:#94A3B8;
+  --faint:#5A6a85;
+  --accent:#5EEAD4;
+  --on-accent:#0F172A;
+  --line:rgba(148,163,184,.16);
+  --disp:'Archivo',sans-serif;
+  --mono:'Space Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--disp);font-weight:400;line-height:1.5;overflow-x:hidden}
+::selection{background:var(--accent);color:var(--on-accent)}
+a{color:inherit}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+
+/* ---------- CURSOR ---------- */
+#cur{position:fixed;top:0;left:0;width:10px;height:10px;border-radius:50%;background:var(--accent);
+  pointer-events:none;z-index:200;transform:translate(-50%,-50%);transition:width .25s,height .25s,opacity .25s;mix-blend-mode:difference}
+#cur.big{width:64px;height:64px}
+@media (hover:none){#cur{display:none}}
+
+/* ---------- PRELOADER ---------- */
+#pre{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:flex-end;justify-content:space-between;
+  padding:32px 40px;transition:transform .9s cubic-bezier(.76,0,.24,1)}
+#pre.done{transform:translateY(-100%)}
+#pre .who{font-family:var(--mono);font-size:12px;letter-spacing:.15em;color:var(--dim);text-transform:uppercase}
+#pre .pct{font-weight:800;font-size:clamp(80px,16vw,220px);line-height:.8;letter-spacing:-.04em;font-stretch:80%}
+
+/* ---------- NAV ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+  padding:22px 40px;mix-blend-mode:difference}
+nav .brand{font-weight:800;font-size:15px;letter-spacing:.02em;text-decoration:none}
+nav .brand sup{color:var(--accent);font-size:9px}
+nav ul{display:flex;gap:30px;list-style:none}
+nav ul a{text-decoration:none;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);opacity:.65;transition:opacity .2s}
+nav ul a:hover{opacity:1}
+
+/* ---------- HERO ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 40px 26px;position:relative}
+.hero .meta-top{position:absolute;top:96px;left:40px;right:40px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.hero .meta-top .avail{display:flex;align-items:center;gap:9px}
+#ticker b{color:var(--accent);font-weight:400}
+.hero .meta-top .avail::before{content:"";width:8px;height:8px;border-radius:50%;background:#3ADB76;animation:blink 2s infinite}
+@keyframes blink{50%{opacity:.35}}
+.hero .statement{max-width:900px;margin-bottom:8vh}
+.hero .statement p{font-size:clamp(22px,3.4vw,42px);font-weight:500;line-height:1.25;letter-spacing:-.02em}
+.hero .statement p .a{color:var(--accent)}
+.hero .statement p .d{color:var(--dim)}
+.big-name{font-weight:800;font-stretch:75%;letter-spacing:-.03em;line-height:.85;
+  font-size:clamp(52px,13vw,220px);text-transform:uppercase}
+.big-name .reg{font-size:.12em;vertical-align:super;color:var(--accent);letter-spacing:0;font-stretch:100%}
+.hero .under{display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid var(--line);
+  margin-top:22px;padding-top:16px;flex-wrap:wrap;gap:10px}
+
+/* line reveal */
+.rv{display:block;overflow:hidden}
+.rv>span{display:block;transform:translateY(110%);transition:transform 1s cubic-bezier(.22,.9,.24,1)}
+.in .rv>span{transform:none}
+.rv:nth-child(2)>span{transition-delay:.08s}
+.rv:nth-child(3)>span{transition-delay:.16s}
+.rv:nth-child(4)>span{transition-delay:.24s}
+
+/* ---------- MARQUEE ---------- */
+.marq{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:16px 0;white-space:nowrap}
+.marq .track{display:inline-block;animation:scroll 26s linear infinite}
+.marq span{font-family:var(--mono);font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);padding:0 26px}
+.marq b{color:var(--accent);font-weight:400}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+/* ---------- SECTIONS ---------- */
+section{padding:130px 40px 0}
+.sec-tag{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:60px}
+
+/* statement / about */
+.about-huge p{font-size:clamp(28px,4.6vw,58px);font-weight:600;letter-spacing:-.025em;line-height:1.12;max-width:1100px}
+.about-huge .d{color:var(--faint)}
+.about-huge .a{color:var(--accent)}
+.mark{background:var(--accent);color:var(--on-accent);padding:0 .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.about-cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:70px;max-width:1100px}
+.about-cols p{color:var(--dim);font-size:16px;line-height:1.7}
+.about-cols p b{color:var(--ink);font-weight:600}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:80px}
+.stat{background:var(--bg);padding:34px 30px}
+.stat .n{font-weight:800;font-stretch:80%;font-size:clamp(44px,6vw,84px);line-height:.9;letter-spacing:-.03em}
+.stat .n i{font-style:normal;color:var(--accent)}
+.stat .l{margin-top:12px}
+
+/* ---------- CAPABILITIES ---------- */
+.caps{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.cap{background:var(--bg);padding:40px 34px;transition:background .35s}
+.cap:hover{background:#131D33}
+.cap .idx{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--faint)}
+.cap h3{font-weight:800;font-stretch:82%;text-transform:uppercase;letter-spacing:-.02em;line-height:1.02;
+  font-size:clamp(26px,3.2vw,42px);margin:16px 0 14px;transition:color .3s}
+.cap:hover h3{color:var(--accent)}
+.cap p{color:var(--dim);font-size:15.5px;line-height:1.7;max-width:46ch}
+.cap ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.cap li{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);
+  border:1px solid var(--line);padding:6px 10px;border-radius:999px}
+
+/* industries */
+.inds{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:80px}
+.ind{background:var(--bg);padding:32px 28px}
+.ind .n{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--faint)}
+.ind h4{font-weight:700;font-size:19px;letter-spacing:-.01em;margin:14px 0 10px}
+.ind p{color:var(--dim);font-size:14px;line-height:1.6}
+
+/* approach steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.step{background:var(--bg);padding:34px 28px}
+.step .n{font-weight:800;font-stretch:80%;font-size:44px;line-height:.9;letter-spacing:-.03em;color:var(--accent)}
+.step h4{font-weight:700;font-size:18px;margin:16px 0 10px;letter-spacing:-.01em}
+.step p{color:var(--dim);font-size:14px;line-height:1.6}
+
+/* work rows - invert on hover */
+.wk{border-top:1px solid var(--line);text-decoration:none;display:block;position:relative;overflow:hidden}
+.wk:last-of-type{border-bottom:1px solid var(--line)}
+.wk .inner{display:grid;grid-template-columns:90px 1fr auto;gap:24px;align-items:center;padding:40px 10px;
+  position:relative;z-index:1;transition:color .3s}
+.wk .idx{font-family:var(--mono);font-size:12px;color:var(--faint);transition:color .3s}
+.wk h3{font-weight:800;font-stretch:82%;font-size:clamp(34px,6vw,76px);letter-spacing:-.025em;line-height:1;text-transform:uppercase}
+.wk .sub{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:10px;transition:color .3s}
+.wk .go{font-size:clamp(24px,3vw,40px);transition:transform .3s}
+.wk::after{content:"";position:absolute;inset:0;background:var(--accent);transform:translateY(101%);transition:transform .4s cubic-bezier(.76,0,.24,1)}
+.wk:hover::after{transform:none}
+.wk:hover .inner{color:var(--on-accent);z-index:2}
+.wk:hover .idx,.wk:hover .sub{color:rgba(15,23,42,.72)}
+.wk:hover .go{transform:translate(6px,-6px) }
+.wk .inner{position:relative;z-index:2}
+
+/* personality strip */
+.person{padding:130px 40px 0;text-align:center}
+.person p{font-size:clamp(18px,2.4vw,28px);font-weight:500;color:var(--dim);max-width:820px;margin:0 auto;letter-spacing:-.01em}
+.person p b{color:var(--ink);font-weight:600}
+.person p .a{color:var(--accent)}
+
+/* ---------- FOOTER ---------- */
+footer{margin-top:140px;padding:0 40px 30px}
+.talk{display:block;text-decoration:none;border-top:1px solid var(--line);padding:50px 0 30px;overflow:hidden}
+.talk .t{font-weight:800;font-stretch:75%;text-transform:uppercase;letter-spacing:-.03em;line-height:.85;
+  font-size:clamp(56px,14vw,240px);white-space:nowrap;transition:color .3s}
+.talk .t i{font-style:normal;display:inline-block;transition:transform .4s}
+.talk:hover .t{color:var(--accent)}
+.talk:hover .t i{transform:translate(10px,-10px)}
+.foot-grid{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;
+  border-top:1px solid var(--line);padding-top:22px}
+.foot-grid .links{display:flex;gap:26px}
+.foot-grid a{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+  text-decoration:none;transition:color .2s}
+.foot-grid a:hover{color:var(--accent)}
+
+/* reveals */
+.fade{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
+.fade.in{opacity:1;transform:none}
+
+@media (max-width:1000px){
+  .inds,.steps{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:860px){
+  nav{padding:18px 22px}
+  nav ul li:not(:last-child){display:none}
+  #pre{padding:22px}
+  .hero{padding:0 22px 20px}
+  .hero .meta-top{top:78px;left:22px;right:22px}
+  section{padding:90px 22px 0}
+  .person{padding:90px 22px 0}
+  footer{padding:0 22px 24px;margin-top:100px}
+  .about-cols{grid-template-columns:1fr;margin-top:44px}
+  .stats{grid-template-columns:1fr}
+  .caps{grid-template-columns:1fr}
+  .cap{padding:30px 24px}
+  .inds,.steps{grid-template-columns:1fr}
+  .wk .inner{grid-template-columns:1fr auto;padding:30px 4px}
+  .wk .idx{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .rv>span{transform:none}
+  .fade{opacity:1;transform:none}
+  #pre{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+
+<div id="pre">
+  <div class="who">Leonti Solutions — Technology Consultancy<br>Haifa, Israel</div>
+  <div class="pct" id="pct">0</div>
+</div>
+
+<nav>
+  <a class="brand" href="#top">LEONTI SOLUTIONS<sup>®</sup></a>
+  <ul>
+    <li><a href="#about" data-h>Company</a></li>
+    <li><a href="#capabilities" data-h>Capabilities</a></li>
+    <li><a href="#industries" data-h>Industries</a></li>
+    <li><a href="#work" data-h>Work</a></li>
+    <li><a href="#contact" data-h>Contact</a></li>
+  </ul>
+</nav>
+
+<header class="hero" id="top">
+  <div class="meta-top mono">
+    <span class="avail">Accepting new engagements — Q4 2026</span>
+    <span id="ticker">S&amp;P <b>—</b> · BTC <b>—</b> · ETH <b>—</b></span>
+  </div>
+
+  <div class="statement in">
+    <p>
+      <span class="rv"><span>We turn <span class="a">technical depth</span></span></span>
+      <span class="rv"><span>into <span class="mark">business outcomes.</span></span></span>
+    </p>
+  </div>
+
+  <div class="in">
+    <div class="big-name">
+      <span class="rv"><span>Leonti</span></span>
+      <span class="rv"><span>Solutions</span></span>
+    </div>
+  </div>
+
+  <div class="under mono">
+    <span>Solutions Engineering · AI &amp; Automation · Product Delivery · Compliance Data</span>
+    <span>Scroll ↓</span>
+  </div>
+</header>
+
+<div class="marq" aria-hidden="true">
+  <div class="track">
+    <span>Solutions Engineering <b>●</b></span><span>AI Agents <b>●</b></span><span>Product Delivery <b>●</b></span><span>Blockchain Analytics <b>●</b></span><span>KYC / AML <b>●</b></span><span>React &amp; TypeScript <b>●</b></span><span>Python <b>●</b></span><span>Cloud &amp; Edge <b>●</b></span><span>Technical Due Diligence <b>●</b></span><span>Automation <b>●</b></span>
+    <span>Solutions Engineering <b>●</b></span><span>AI Agents <b>●</b></span><span>Product Delivery <b>●</b></span><span>Blockchain Analytics <b>●</b></span><span>KYC / AML <b>●</b></span><span>React &amp; TypeScript <b>●</b></span><span>Python <b>●</b></span><span>Cloud &amp; Edge <b>●</b></span><span>Technical Due Diligence <b>●</b></span><span>Automation <b>●</b></span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="sec-tag mono"><span>① The Company</span><span>Who we are</span></div>
+  <div class="about-huge fade">
+    <p>Engineer's depth. <span class="mark">Consultant's clarity.</span> We sit between <span class="a">technical systems</span> and the people who need answers from them.</p>
+  </div>
+  <div class="about-cols fade">
+    <p><b>Leonti Solutions</b> is a technology consultancy built for the gap most teams struggle with: the space between what a system can do and what the business actually needs from it. We design solutions, build the integrations, and translate what the data says into what to do next.</p>
+    <p>Our work spans <b>blockchain analytics and compliance</b>, <b>venture capital operations</b>, and <b>defense-grade program delivery</b> — and we ship in <b>React, TypeScript, Python and Swift</b>. We stay close to the code, because staying close to the code keeps our judgment sharp.</p>
+  </div>
+  <div class="stats fade">
+    <div class="stat"><div class="n">04<i>.</i></div><div class="l mono">Core capability areas</div></div>
+    <div class="stat"><div class="n">05<i>+</i></div><div class="l mono">Products shipped end to end</div></div>
+    <div class="stat"><div class="n">03<i>+</i></div><div class="l mono">Regulated industries served</div></div>
+  </div>
+</section>
+
+<section id="capabilities">
+  <div class="sec-tag mono"><span>② Capabilities</span><span>What we do</span></div>
+  <div class="caps fade">
+    <div class="cap" data-h>
+      <span class="idx">01</span>
+      <h3>Solutions Engineering</h3>
+      <p>Customer-facing technical work that moves deals and deployments forward: solution design, integrations, technical demos, and onboarding for investigations, compliance and risk teams.</p>
+      <ul><li>Solution Design</li><li>Integrations</li><li>Technical Demos</li><li>Pre-Sales</li></ul>
+    </div>
+    <div class="cap" data-h>
+      <span class="idx">02</span>
+      <h3>AI &amp; Automation</h3>
+      <p>Production AI that does real work — agents wired into your tools, LLM integrations with guardrails, and automation that removes the manual steps nobody should still be doing by hand.</p>
+      <ul><li>AI Agents</li><li>LLM Integration</li><li>Workflow Automation</li><li>Evaluation</li></ul>
+    </div>
+    <div class="cap" data-h>
+      <span class="idx">03</span>
+      <h3>Product Engineering</h3>
+      <p>Full product delivery from blank repo to shipped release. Web, macOS and edge — built to be maintained, instrumented and handed over cleanly.</p>
+      <ul><li>React / TypeScript</li><li>Python</li><li>Swift / macOS</li><li>Cloudflare &amp; Edge</li></ul>
+    </div>
+    <div class="cap" data-h>
+      <span class="idx">04</span>
+      <h3>Compliance &amp; Data</h3>
+      <p>Compliance-grade data work for regulated environments: blockchain analytics, KYC/AML process design across international structures, risk scoring and investigation workflows.</p>
+      <ul><li>Blockchain Analytics</li><li>KYC / AML</li><li>Risk &amp; Investigations</li><li>Reporting</li></ul>
+    </div>
+  </div>
+
+  <div class="inds fade" id="industries">
+    <div class="ind">
+      <div class="n">Sector 01</div>
+      <h4>Blockchain &amp; Digital Assets</h4>
+      <p>Analytics, tracing and compliance tooling for exchanges, institutions and investigators.</p>
+    </div>
+    <div class="ind">
+      <div class="n">Sector 02</div>
+      <h4>Venture Capital &amp; Finance</h4>
+      <p>Fund operations, LP onboarding, KYC/AML across jurisdictions, and reporting through active fundraises.</p>
+    </div>
+    <div class="ind">
+      <div class="n">Sector 03</div>
+      <h4>Defense &amp; Aerospace</h4>
+      <p>Complex program delivery where schedules, stakeholders and precision are not optional.</p>
+    </div>
+    <div class="ind">
+      <div class="n">Sector 04</div>
+      <h4>SaaS &amp; Startups</h4>
+      <p>Zero-to-one product build-out, technical due diligence, and AI features that actually ship.</p>
+    </div>
+  </div>
+</section>
+
+<section id="approach">
+  <div class="sec-tag mono"><span>③ Approach</span><span>How we engage</span></div>
+  <div class="steps fade">
+    <div class="step">
+      <div class="n">01</div>
+      <h4>Diagnose</h4>
+      <p>We map the system and the decision it needs to support — before proposing anything.</p>
+    </div>
+    <div class="step">
+      <div class="n">02</div>
+      <h4>Design</h4>
+      <p>A concrete architecture and scope, sized to your constraints rather than a template.</p>
+    </div>
+    <div class="step">
+      <div class="n">03</div>
+      <h4>Build</h4>
+      <p>Short delivery cycles with working software in your hands, not status decks.</p>
+    </div>
+    <div class="step">
+      <div class="n">04</div>
+      <h4>Hand Over</h4>
+      <p>Documented, instrumented and owned by your team — we design ourselves out.</p>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="sec-tag mono"><span>④ Selected Work</span><span>Built &amp; shipped</span></div>
+  <a class="wk fade" href="https://textpolisher.app" target="_blank" rel="noopener" data-h>
+    <div class="inner">
+      <span class="idx">01</span>
+      <div><h3>TextPolisher</h3><div class="sub">macOS app · Apple Intelligence · Product Hunt launch</div></div>
+      <span class="go">↗</span>
+    </div>
+  </a>
+  <a class="wk fade" href="https://agentlights.com" target="_blank" rel="noopener" data-h>
+    <div class="inner">
+      <span class="idx">02</span>
+      <div><h3>AgentLights</h3><div class="sub">Traffic light for AI agents · macOS menu bar · Cursor &amp; Claude Code · paid product</div></div>
+      <span class="go">↗</span>
+    </div>
+  </a>
+  <a class="wk fade" href="https://thinklikevc.vercel.app" target="_blank" rel="noopener" data-h>
+    <div class="inner">
+      <span class="idx">03</span>
+      <div><h3>Think Like a VC</h3><div class="sub">3D cap table &amp; dilution calculator · interactive equity modeling</div></div>
+      <span class="go">↗</span>
+    </div>
+  </a>
+  <a class="wk fade" href="https://github.com/DanLeonti/cursor-cost-per-project" target="_blank" rel="noopener" data-h>
+    <div class="inner">
+      <span class="idx">04</span>
+      <div><h3>Cursor Cost</h3><div class="sub">Per-project AI spend tracking · exact billing · daily Slack reports · Python</div></div>
+      <span class="go">↗</span>
+    </div>
+  </a>
+  <a class="wk fade" href="https://github.com/DanLeonti" target="_blank" rel="noopener" data-h>
+    <div class="inner">
+      <span class="idx">05</span>
+      <div><h3>WhatsApp AI</h3><div class="sub">AI assistant inside WhatsApp · Claude API · Node.js</div></div>
+      <span class="go">↗</span>
+    </div>
+  </a>
+</section>
+
+<div class="person fade">
+  <p>Founded and led by <b>Daniel Leonti</b> from <b>Haifa</b>, Israel — a solutions engineer whose background runs from deep-tech venture capital to defense systems. <span class="a">✈</span> We build things that fly, literally and in production.</p>
+</div>
+
+<footer id="contact">
+  <a class="talk" href="mailto:hello@leonti.solutions" data-h>
+    <div class="t">Work With Us <i>↗</i></div>
+  </a>
+  <div class="foot-grid">
+    <span class="mono">© 2026 Leonti Solutions — hand-coded, deployed on Cloudflare</span>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/danielleonti" target="_blank" rel="noopener" data-h>LinkedIn</a>
+      <a href="https://github.com/DanLeonti" target="_blank" rel="noopener" data-h>GitHub</a>
+      <a href="mailto:hello@leonti.solutions" data-h>Email</a>
+    </div>
+    <span class="mono">Local time — <span id="clock2">--:--:--</span></span>
+  </div>
+</footer>
+
+<script>
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* preloader */
+const pre=document.getElementById('pre'),pct=document.getElementById('pct');
+if(reduce){pre.remove()}
+else{
+  let n=0;
+  const iv=setInterval(()=>{
+    n=Math.min(100,n+Math.ceil(Math.random()*14));
+    pct.textContent=n;
+    if(n>=100){clearInterval(iv);setTimeout(()=>pre.classList.add('done'),150);setTimeout(()=>pre.remove(),1200)}
+  },90);
+}
+
+/* custom cursor */
+const cur=document.getElementById('cur');
+addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px'},{passive:true});
+document.querySelectorAll('a,[data-h]').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+});
+
+/* live Haifa clock (footer) */
+function tick(){
+  const t=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jerusalem',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date());
+  const c1=document.getElementById('clock'),c2=document.getElementById('clock2');
+  if(c1)c1.textContent=t; if(c2)c2.textContent=t;
+}
+tick();setInterval(tick,1000);
+
+/* live market ticker: S&P 500 + BTC + ETH */
+const fmt=(n,d=0)=>Number(n).toLocaleString('en-US',{maximumFractionDigits:d});
+async function loadTicker(){
+  const el=document.getElementById('ticker');
+  if(!el)return;
+  let sp='—',btc='—',eth='—';
+  try{
+    const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
+    const j=await r.json();
+    if(j.bitcoin) btc='$'+fmt(j.bitcoin.usd);
+    if(j.ethereum) eth='$'+fmt(j.ethereum.usd);
+  }catch(e){}
+  try{
+    const r=await fetch('/api/sp500');
+    const j=await r.json();
+    if(j.sp500) sp=fmt(j.sp500,2);
+  }catch(e){}
+  el.innerHTML=(sp!=='—'?`S&amp;P <b>${sp}</b> · `:'')+`BTC <b>${btc}</b> · ETH <b>${eth}</b>`;
+}
+loadTicker();setInterval(loadTicker,60000);
+
+/* scroll reveals */
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+},{threshold:.12});
+document.querySelectorAll('.fade').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
