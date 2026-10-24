@@ -44,8 +44,20 @@ body {
   padding-block: 32px 64px;
 }
 main { max-width: 1440px; margin: 0 auto; display: grid; gap: 36px; }
-.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
-@media (max-width: 1100px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto auto auto auto; column-gap: 40px; row-gap: 16px; align-items: start; }
+.cols > section { display: contents; }
+.col-a > * { grid-column: 1; }
+.col-b > * { grid-column: 2; }
+.cols h2 { grid-row: 1; }
+.cols h2 + p { grid-row: 2; }
+.cols .controls { grid-row: 3; display: grid; gap: 16px; }
+.cols .row-table { grid-row: 4; }
+.cols .notes, .cols .rule { grid-row: 5; }
+@media (max-width: 1100px) {
+  .cols { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: none; gap: 48px; }
+  .cols > section { display: grid; gap: 16px; }
+  .col-a > *, .col-b > * { grid-column: auto; grid-row: auto; }
+}
 h1, h2 { font-family: var(--display); font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; margin: 0; }
 h1 { font-size: clamp(30px, 5vw, 42px); line-height: 1.1; }
 h2 { font-size: clamp(22px, 3vw, 28px); line-height: 1.2; }
@@ -162,16 +174,18 @@ img { max-width: 100%; }
   </header>
 
   <div class="cols">
-  <section>
+  <section class="col-a">
     <h2>Pre-flop range chart</h2>
     <p>Green means raise when you're first in; grey means fold. Pairs run down the diagonal, suited hands (same suit, marked <code>s</code>) sit above it, offsuit hands (marked <code>o</code>) sit below. T stands for 10.</p>
-    <div class="legend">
-      <span><i class="swatch on"></i> Play (raise ~3× the big blind)</span>
-      <span><i class="swatch off"></i> Fold</span>
+    <div class="controls">
+      <div class="legend">
+        <span><i class="swatch on"></i> Play (raise ~3× the big blind)</span>
+        <span><i class="swatch off"></i> Fold</span>
+      </div>
+      <div class="segs" id="style-segs" role="group" aria-label="Style of play"><button type="button" class="seg on" data-style="tight" aria-pressed="true">Tight<small>21% of hands</small></button><button type="button" class="seg" data-style="balanced" aria-pressed="false">Balanced<small>27% of hands</small></button><button type="button" class="seg" data-style="loose" aria-pressed="false">Loose / aggressive<small>44% of hands</small></button></div>
+      <p class="style-desc muted" data-style="tight">The chart from your image. Few hands, almost all of them strong. Safest while you learn; what you should play from early seats.</p><p class="style-desc muted" data-style="balanced" hidden>A typical middle-position opening range at 100 big blinds. Adds more suited kings, suited connectors and the offsuit broadways.</p><p class="style-desc muted" data-style="loose" hidden>A button-style range. Any suited king, most suited connectors and gappers, and weak offsuit aces. Only works when you act last and opponents fold enough.</p>
     </div>
-    <div class="segs" id="style-segs" role="group" aria-label="Style of play"><button type="button" class="seg on" data-style="tight" aria-pressed="true">Tight<small>21% of hands</small></button><button type="button" class="seg" data-style="balanced" aria-pressed="false">Balanced<small>27% of hands</small></button><button type="button" class="seg" data-style="loose" aria-pressed="false">Loose / aggressive<small>44% of hands</small></button></div>
-    <p class="style-desc muted" data-style="tight">The chart from your image. Few hands, almost all of them strong. Safest while you learn; what you should play from early seats.</p><p class="style-desc muted" data-style="balanced" hidden>A typical middle-position opening range at 100 big blinds. Adds more suited kings, suited connectors and the offsuit broadways.</p><p class="style-desc muted" data-style="loose" hidden>A button-style range. Any suited king, most suited connectors and gappers, and weak offsuit aces. Only works when you act last and opponents fold enough.</p>
-    <div class="scroll"><table class="range"><thead><tr><th></th><th>A</th><th>K</th><th>Q</th><th>J</th><th>T</th><th>9</th><th>8</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th></tr></thead><tbody>
+    <div class="scroll row-table"><table class="range"><thead><tr><th></th><th>A</th><th>K</th><th>Q</th><th>J</th><th>T</th><th>9</th><th>8</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th></tr></thead><tbody>
 <tr><th>A</th><td class="pair play" data-hand="AA">AA</td><td class="suited play" data-hand="AKs">AKs</td><td class="suited play" data-hand="AQs">AQs</td><td class="suited play" data-hand="AJs">AJs</td><td class="suited play" data-hand="ATs">ATs</td><td class="suited play" data-hand="A9s">A9s</td><td class="suited play" data-hand="A8s">A8s</td><td class="suited play" data-hand="A7s">A7s</td><td class="suited play" data-hand="A6s">A6s</td><td class="suited play" data-hand="A5s">A5s</td><td class="suited play" data-hand="A4s">A4s</td><td class="suited play" data-hand="A3s">A3s</td><td class="suited play" data-hand="A2s">A2s</td></tr>
 <tr><th>K</th><td class="offsuit play" data-hand="AKo">AKo</td><td class="pair play" data-hand="KK">KK</td><td class="suited play" data-hand="KQs">KQs</td><td class="suited play" data-hand="KJs">KJs</td><td class="suited play" data-hand="KTs">KTs</td><td class="suited play" data-hand="K9s">K9s</td><td class="suited" data-hand="K8s">K8s</td><td class="suited" data-hand="K7s">K7s</td><td class="suited" data-hand="K6s">K6s</td><td class="suited" data-hand="K5s">K5s</td><td class="suited" data-hand="K4s">K4s</td><td class="suited" data-hand="K3s">K3s</td><td class="suited" data-hand="K2s">K2s</td></tr>
 <tr><th>Q</th><td class="offsuit play" data-hand="AQo">AQo</td><td class="offsuit play" data-hand="KQo">KQo</td><td class="pair play" data-hand="QQ">QQ</td><td class="suited play" data-hand="QJs">QJs</td><td class="suited play" data-hand="QTs">QTs</td><td class="suited play" data-hand="Q9s">Q9s</td><td class="suited" data-hand="Q8s">Q8s</td><td class="suited" data-hand="Q7s">Q7s</td><td class="suited" data-hand="Q6s">Q6s</td><td class="suited" data-hand="Q5s">Q5s</td><td class="suited" data-hand="Q4s">Q4s</td><td class="suited" data-hand="Q3s">Q3s</td><td class="suited" data-hand="Q2s">Q2s</td></tr>
@@ -193,10 +207,10 @@ img { max-width: 100%; }
     </ul>
   </section>
 
-  <section>
+  <section class="col-b">
     <h2>Hand rankings</h2>
     <p>Strongest at the top. A hand from a higher row always beats any hand from a lower row, whatever the cards: a pair of twos beats ace-high, a 6-high straight beats three aces, a 7-high flush beats an ace-high straight.</p>
-    <div class="scroll"><table class='ranks'><thead><tr><th>#</th><th>Hand</th><th>Example</th><th>Tie-break</th></tr></thead><tbody><tr><td class='num'>1</td><td class='name'>Royal flush<small>10-J-Q-K-A, all one suit</small></td><td><span class="hand"><span class="card"><b>T</b><i>♠</i></span><span class="card"><b>J</b><i>♠</i></span><span class="card"><b>Q</b><i>♠</i></span><span class="card"><b>K</b><i>♠</i></span><span class="card"><b>A</b><i>♠</i></span></span></td><td class='tie'>Unbeatable. Only a tie with another royal is possible.</td></tr>
+    <div class="scroll row-table"><table class='ranks'><thead><tr><th>#</th><th>Hand</th><th>Example</th><th>Tie-break</th></tr></thead><tbody><tr><td class='num'>1</td><td class='name'>Royal flush<small>10-J-Q-K-A, all one suit</small></td><td><span class="hand"><span class="card"><b>T</b><i>♠</i></span><span class="card"><b>J</b><i>♠</i></span><span class="card"><b>Q</b><i>♠</i></span><span class="card"><b>K</b><i>♠</i></span><span class="card"><b>A</b><i>♠</i></span></span></td><td class='tie'>Unbeatable. Only a tie with another royal is possible.</td></tr>
 <tr><td class='num'>2</td><td class='name'>Straight flush<small>Five in a row, all one suit</small></td><td><span class="hand"><span class="card red"><b>5</b><i>♥</i></span><span class="card red"><b>6</b><i>♥</i></span><span class="card red"><b>7</b><i>♥</i></span><span class="card red"><b>8</b><i>♥</i></span><span class="card red"><b>9</b><i>♥</i></span></span></td><td class='tie'>Higher top card wins.</td></tr>
 <tr><td class='num'>3</td><td class='name'>Four of a kind<small>All four cards of one rank</small></td><td><span class="hand"><span class="card"><b>Q</b><i>♠</i></span><span class="card red"><b>Q</b><i>♥</i></span><span class="card red"><b>Q</b><i>♦</i></span><span class="card"><b>Q</b><i>♣</i></span><span class="card"><b>6</b><i>♠</i></span></span></td><td class='tie'>Higher quads win; the fifth card decides only when the quads are on the board.</td></tr>
 <tr><td class='num'>4</td><td class='name'>Full house<small>Three of a kind plus a pair</small></td><td><span class="hand"><span class="card"><b>9</b><i>♠</i></span><span class="card red"><b>9</b><i>♥</i></span><span class="card"><b>9</b><i>♣</i></span><span class="card red"><b>4</b><i>♦</i></span><span class="card"><b>4</b><i>♠</i></span></span></td><td class='tie'>Higher three-of-a-kind wins, then the higher pair.</td></tr>
