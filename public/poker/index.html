@@ -135,6 +135,19 @@ table.range td:hover, table.range td.hot { outline: 2px solid var(--fg); outline
 .tip .t-act.play { background: var(--felt); color: var(--felt-fg); }
 .tip .t-act.fold { background: var(--fold); color: var(--fold-fg); }
 
+/* Outs */
+table.outs { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 14px; font-variant-numeric: tabular-nums; }
+table.outs th { text-align: left; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: bottom; }
+table.outs th small { display: block; text-transform: none; letter-spacing: 0; font-weight: 400; font-size: 11px; }
+table.outs td { padding: 8px 10px; border-bottom: 1px solid var(--line); }
+table.outs td.num { font-family: var(--mono); font-weight: 700; width: 3em; }
+table.outs td.pct { font-family: var(--mono); text-align: right; width: 7em; }
+table.outs th:nth-child(n+3) { text-align: right; }
+.outs-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+@media (max-width: 1100px) { .outs-wrap { grid-template-columns: minmax(0, 1fr); gap: 24px; } }
+.how { display: grid; gap: 10px; font-size: 15px; max-width: 60ch; }
+.how .ex { padding: 12px 14px; border-left: 3px solid var(--felt); background: var(--card); font-size: 14px; }
+
 /* Hand rankings */
 table.ranks { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 14px; }
 table.ranks th { text-align: left; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--line); }
@@ -224,6 +237,19 @@ img { max-width: 100%; }
 <tr><td class='num'>10</td><td class='name'>High card<small>Nothing connects</small></td><td><span class="hand"><span class="card"><b>A</b><i>♠</i></span><span class="card red"><b>J</b><i>♦</i></span><span class="card"><b>8</b><i>♣</i></span><span class="card red"><b>5</b><i>♥</i></span><span class="card"><b>2</b><i>♠</i></span></span></td><td class='tie'>Highest card wins, then the next, and so on.</td></tr></tbody></table></div>
   </section>
   </div>
+
+  <section>
+    <h2>Outs and the rule of 4 and 2</h2>
+    <p>An out is any unseen card that turns your hand into the winner. Count them, then multiply: by 4 on the flop (two cards still to come), by 2 on the turn (one card to come). That gives your chance to hit within a point or two of the exact number.</p>
+    <div class="outs-wrap">
+      <div class="scroll"><table class='outs'><thead><tr><th>Outs</th><th>Typical draw</th><th>Flop → river<br><small>two cards to come</small></th><th>Rule of 4</th><th>Turn → river<br><small>one card to come</small></th><th>Rule of 2</th></tr></thead><tbody><tr><td class='num'>2</td><td>Pocket pair hoping for a set</td><td class='pct'>8%</td><td class='pct muted'>8%</td><td class='pct'>4%</td><td class='pct muted'>4%</td></tr><tr><td class='num'>4</td><td>Gutshot straight draw</td><td class='pct'>16%</td><td class='pct muted'>16%</td><td class='pct'>9%</td><td class='pct muted'>8%</td></tr><tr><td class='num'>6</td><td>Two overcards</td><td class='pct'>24%</td><td class='pct muted'>24%</td><td class='pct'>13%</td><td class='pct muted'>12%</td></tr><tr><td class='num'>8</td><td>Open-ended straight draw</td><td class='pct'>31%</td><td class='pct muted'>32%</td><td class='pct'>17%</td><td class='pct muted'>16%</td></tr><tr><td class='num'>9</td><td>Flush draw</td><td class='pct'>35%</td><td class='pct muted'>36%</td><td class='pct'>20%</td><td class='pct muted'>18%</td></tr><tr><td class='num'>12</td><td>Flush draw + gutshot</td><td class='pct'>45%</td><td class='pct muted'>48%</td><td class='pct'>26%</td><td class='pct muted'>24%</td></tr><tr><td class='num'>15</td><td>Flush draw + open-ended straight draw</td><td class='pct'>54%</td><td class='pct muted'>60%</td><td class='pct'>33%</td><td class='pct muted'>30%</td></tr></tbody></table></div>
+      <div class="how">
+        <div class="ex"><strong>Counting outs.</strong> Flush draw: 13 cards of your suit, you see 4 (two in hand, two on board), so 9 remain. Open-ended straight draw (you hold 7-8 on a 5-6-K board): any 4 or any 9 completes it, 8 cards. Gutshot (7-8 on 5-9-K): only a 6, 4 cards.</div>
+        <div class="ex"><strong>Don't double count.</strong> If one card completes both your flush and your straight, it's still one out. A flush draw plus an open-ender is 15 outs, not 17, because two of the straight cards are also your suit.</div>
+        <div class="ex"><strong>Using it.</strong> Compare your chance to hit against the price. Facing a half-pot bet you need to win 25% of the time: a flush draw (35%) calls, a gutshot (17%) folds. Facing a pot-sized bet you need 33%: now only the big combo draws call.</div>
+      </div>
+    </div>
+  </section>
 </main>
 <script>
 (function () {
