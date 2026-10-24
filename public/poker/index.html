@@ -141,6 +141,13 @@ table.outs th { text-align: left; font-size: 12px; letter-spacing: 0.08em; text-
 table.outs th small { display: block; text-transform: none; letter-spacing: 0; font-weight: 400; font-size: 11px; }
 table.outs td { padding: 8px 10px; border-bottom: 1px solid var(--line); }
 table.outs td.num { font-family: var(--mono); font-weight: 700; width: 3em; }
+table.outs tr.ex-row { cursor: default; }
+table.outs tr.ex-row:hover td, table.outs tr.ex-row.hot td { background: var(--card); }
+table.outs tr.ex-row:focus-visible { outline: 2px solid var(--felt); outline-offset: -2px; }
+.tip .t-row { display: grid; grid-template-columns: 4.5em auto; align-items: center; gap: 8px; justify-self: start; }
+.tip .t-lbl { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.tip .t-outs { max-width: 32ch; color: var(--muted); justify-self: start; }
+.tip.wide { justify-items: start; }
 table.outs td.pct { font-family: var(--mono); text-align: right; width: 7em; }
 table.outs th:nth-child(n+3) { text-align: right; }
 .outs-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
@@ -240,9 +247,9 @@ img { max-width: 100%; }
 
   <section>
     <h2>Outs and the rule of 4 and 2</h2>
-    <p>An out is any unseen card that turns your hand into the winner. Count them, then multiply: by 4 on the flop (two cards still to come), by 2 on the turn (one card to come). That gives your chance to hit within a point or two of the exact number.</p>
+    <p>An out is any unseen card that turns your hand into the winner. Count them, then multiply: by 4 on the flop (two cards still to come), by 2 on the turn (one card to come). That gives your chance to hit within a point or two of the exact number. Hover a row to see an example hand and board.</p>
     <div class="outs-wrap">
-      <div class="scroll"><table class='outs'><thead><tr><th>Outs</th><th>Typical draw</th><th>Flop → river<br><small>two cards to come</small></th><th>Rule of 4</th><th>Turn → river<br><small>one card to come</small></th><th>Rule of 2</th></tr></thead><tbody><tr><td class='num'>2</td><td>Pocket pair hoping for a set</td><td class='pct'>8%</td><td class='pct muted'>8%</td><td class='pct'>4%</td><td class='pct muted'>4%</td></tr><tr><td class='num'>4</td><td>Gutshot straight draw</td><td class='pct'>16%</td><td class='pct muted'>16%</td><td class='pct'>9%</td><td class='pct muted'>8%</td></tr><tr><td class='num'>6</td><td>Two overcards</td><td class='pct'>24%</td><td class='pct muted'>24%</td><td class='pct'>13%</td><td class='pct muted'>12%</td></tr><tr><td class='num'>8</td><td>Open-ended straight draw</td><td class='pct'>31%</td><td class='pct muted'>32%</td><td class='pct'>17%</td><td class='pct muted'>16%</td></tr><tr><td class='num'>9</td><td>Flush draw</td><td class='pct'>35%</td><td class='pct muted'>36%</td><td class='pct'>20%</td><td class='pct muted'>18%</td></tr><tr><td class='num'>12</td><td>Flush draw + gutshot</td><td class='pct'>45%</td><td class='pct muted'>48%</td><td class='pct'>26%</td><td class='pct muted'>24%</td></tr><tr><td class='num'>15</td><td>Flush draw + open-ended straight draw</td><td class='pct'>54%</td><td class='pct muted'>60%</td><td class='pct'>33%</td><td class='pct muted'>30%</td></tr></tbody></table></div>
+      <div class="scroll"><table class='outs'><thead><tr><th>Outs</th><th>Typical draw</th><th>Flop → river<br><small>two cards to come</small></th><th>Rule of 4</th><th>Turn → river<br><small>one card to come</small></th><th>Rule of 2</th></tr></thead><tbody><tr class='ex-row' tabindex='0' data-ex-hand='8s 8d' data-ex-board='Ah Kc 5d' data-ex-outs='The two remaining eights: 8♥ 8♣'><td class='num'>2</td><td>Pocket pair hoping for a set</td><td class='pct'>8%</td><td class='pct muted'>8%</td><td class='pct'>4%</td><td class='pct muted'>4%</td></tr><tr class='ex-row' tabindex='0' data-ex-hand='7h 8c' data-ex-board='5s 9d Kc' data-ex-outs='Any six fills 5-6-7-8-9: 6♠ 6♥ 6♦ 6♣'><td class='num'>4</td><td>Gutshot straight draw</td><td class='pct'>16%</td><td class='pct muted'>16%</td><td class='pct'>9%</td><td class='pct muted'>8%</td></tr><tr class='ex-row' tabindex='0' data-ex-hand='As Kd' data-ex-board='9c 6h 2s' data-ex-outs='Any ace or king makes top pair: 3 aces + 3 kings'><td class='num'>6</td><td>Two overcards</td><td class='pct'>24%</td><td class='pct muted'>24%</td><td class='pct'>13%</td><td class='pct muted'>12%</td></tr><tr class='ex-row' tabindex='0' data-ex-hand='7h 8c' data-ex-board='5s 6d Kc' data-ex-outs='Any four (4-5-6-7-8) or any nine (5-6-7-8-9): 4 + 4'><td class='num'>8</td><td>Open-ended straight draw</td><td class='pct'>31%</td><td class='pct muted'>32%</td><td class='pct'>17%</td><td class='pct muted'>16%</td></tr><tr class='ex-row' tabindex='0' data-ex-hand='Ah 9h' data-ex-board='Kh 6h 2c' data-ex-outs='The nine hearts still unseen (13 minus the 4 you can see)'><td class='num'>9</td><td>Flush draw</td><td class='pct'>35%</td><td class='pct muted'>36%</td><td class='pct'>20%</td><td class='pct muted'>18%</td></tr><tr class='ex-row' tabindex='0' data-ex-hand='7h 8h' data-ex-board='5h 9c Kh' data-ex-outs='9 hearts + the three sixes that aren't hearts (6♥ is already counted)'><td class='num'>12</td><td>Flush draw + gutshot</td><td class='pct'>45%</td><td class='pct muted'>48%</td><td class='pct'>26%</td><td class='pct muted'>24%</td></tr><tr class='ex-row' tabindex='0' data-ex-hand='7h 8h' data-ex-board='5h 6d Kh' data-ex-outs='9 hearts + three non-heart fours + three non-heart nines'><td class='num'>15</td><td>Flush draw + open-ended straight draw</td><td class='pct'>54%</td><td class='pct muted'>60%</td><td class='pct'>33%</td><td class='pct muted'>30%</td></tr></tbody></table></div>
       <div class="how">
         <div class="ex"><strong>Counting outs.</strong> Flush draw: 13 cards of your suit, you see 4 (two in hand, two on board), so 9 remain. Open-ended straight draw (you hold 7-8 on a 5-6-K board): any 4 or any 9 completes it, 8 cards. Gutshot (7-8 on 5-9-K): only a 6, 4 cards.</div>
         <div class="ex"><strong>Don't double count.</strong> If one card completes both your flush and your straight, it's still one out. A flush draw plus an open-ender is 15 outs, not 17, because two of the straight cards are also your suit.</div>
@@ -301,15 +308,11 @@ img { max-width: 100%; }
     var name = !tag ? 'Pocket ' + RANK_NAMES[a] + 's' : RANK_NAMES[a] + '-' + RANK_NAMES[b] + ' ' + kind.toLowerCase();
     return { cards: cards, kind: kind, name: name };
   }
-  function showTip(td) {
-    var h = td.getAttribute('data-hand');
-    var d = describe(h);
-    var play = td.classList.contains('play');
-    tip.innerHTML = '<span class="hand">' + d.cards + '</span>' +
-      '<span class="t-name">' + d.name + '</span>' +
-      '<span class="t-act ' + (play ? 'play' : 'fold') + '">' + (play ? 'Raise' : 'Fold') + '</span>';
+  function placeTip(anchor, html, wide) {
+    tip.innerHTML = html;
+    tip.classList.toggle('wide', !!wide);
     tip.hidden = false;
-    var r = td.getBoundingClientRect();
+    var r = anchor.getBoundingClientRect();
     var tw = tip.offsetWidth, th = tip.offsetHeight;
     var x = r.left + r.width / 2 - tw / 2;
     var y = r.top - th - 8;
@@ -317,23 +320,52 @@ img { max-width: 100%; }
     x = Math.max(8, Math.min(x, window.innerWidth - tw - 8));
     tip.style.left = x + 'px'; tip.style.top = y + 'px';
   }
+  function showTip(td) {
+    var d = describe(td.getAttribute('data-hand'));
+    var play = td.classList.contains('play');
+    placeTip(td, '<span class="hand">' + d.cards + '</span>' +
+      '<span class="t-name">' + d.name + '</span>' +
+      '<span class="t-act ' + (play ? 'play' : 'fold') + '">' + (play ? 'Raise' : 'Fold') + '</span>', false);
+  }
+  function cardsFrom(str) {
+    return '<span class="hand">' + str.split(' ').map(function (c) { return cardHTML(c[0], c[1]); }).join('') + '</span>';
+  }
+  function showOutsTip(tr) {
+    placeTip(tr.querySelector('td:nth-child(2)'),
+      '<div class="t-row"><span class="t-lbl">You</span>' + cardsFrom(tr.getAttribute('data-ex-hand')) + '</div>' +
+      '<div class="t-row"><span class="t-lbl">Board</span>' + cardsFrom(tr.getAttribute('data-ex-board')) + '</div>' +
+      '<div class="t-outs"><strong>' + tr.querySelector('td.num').textContent + ' outs:</strong> ' + tr.getAttribute('data-ex-outs') + '</div>', true);
+  }
   var hot = null;
+  function setHot(el, show) {
+    if (hot) hot.classList.remove('hot');
+    if (el && el !== hot) { hot = el; el.classList.add('hot'); show(el); }
+    else { hot = null; tip.hidden = true; }
+  }
   var grid = document.querySelector('table.range');
   grid.addEventListener('mouseover', function (e) {
     var td = e.target.closest('td[data-hand]');
     if (td) showTip(td);
   });
   grid.addEventListener('mouseleave', function () { if (!hot) tip.hidden = true; });
-  grid.addEventListener('click', function (e) {
-    var td = e.target.closest('td[data-hand]');
-    if (hot) hot.classList.remove('hot');
-    if (td && td !== hot) { hot = td; td.classList.add('hot'); showTip(td); }
-    else { hot = null; tip.hidden = true; }
+  grid.addEventListener('click', function (e) { setHot(e.target.closest('td[data-hand]'), showTip); });
+
+  var outs = document.querySelector('table.outs');
+  outs.addEventListener('mouseover', function (e) {
+    var tr = e.target.closest('tr.ex-row');
+    if (tr) showOutsTip(tr);
   });
+  outs.addEventListener('mouseleave', function () { if (!hot) tip.hidden = true; });
+  outs.addEventListener('click', function (e) { setHot(e.target.closest('tr.ex-row'), showOutsTip); });
+  outs.addEventListener('focusin', function (e) { var tr = e.target.closest('tr.ex-row'); if (tr) showOutsTip(tr); });
+  outs.addEventListener('focusout', function () { if (!hot) tip.hidden = true; });
+
   document.addEventListener('click', function (e) {
-    if (hot && !grid.contains(e.target)) { hot.classList.remove('hot'); hot = null; tip.hidden = true; }
+    if (hot && !grid.contains(e.target) && !outs.contains(e.target)) { hot.classList.remove('hot'); hot = null; tip.hidden = true; }
   });
-  window.addEventListener('scroll', function () { if (hot) showTip(hot); }, { passive: true });
+  window.addEventListener('scroll', function () {
+    if (hot) (hot.tagName === 'TR' ? showOutsTip : showTip)(hot);
+  }, { passive: true });
 
   var root = document.documentElement;
   var btn = document.getElementById('theme-toggle');
