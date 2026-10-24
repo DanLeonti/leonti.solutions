@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hold'em Quick Reference</title>
+<meta name="description" content="Texas Hold'em quick reference: pre-flop range chart with tight, balanced and loose styles, plus the ten hand rankings with examples.">
+<link rel="canonical" href="https://leonti.solutions/poker/">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow column of reading text; the two tables sit full-width inside scroll containers. */
+:root {
+  --bg: #f6f4ee;
+  --fg: #1d1f1b;
+  --muted: #6a6e63;
+  --line: #d9d7cd;
+  --card: #ffffff;
+  --felt: #2f8f4e;
+  --felt-fg: #ffffff;
+  --fold: #e6e4db;
+  --fold-fg: #7b7e72;
+  --red: #c62d2d;
+  --display: "Fraunces", Georgia, serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15181a; --fg: #ebe9e1; --muted: #9ba097; --line: #2d3235; --card: #1d2124;
+    --felt: #2f9353; --felt-fg: #ffffff; --fold: #262b2e; --fold-fg: #7d837c; --red: #ef6161;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15181a; --fg: #ebe9e1; --muted: #9ba097; --line: #2d3235; --card: #1d2124;
+  --felt: #2f9353; --felt-fg: #ffffff; --fold: #262b2e; --fold-fg: #7d837c; --red: #ef6161;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+}
+main { max-width: 1440px; margin: 0 auto; display: grid; gap: 36px; }
+.cols { display: grid; grid-template-columns: minmax(0, auto) minmax(0, 1fr); gap: 40px; align-items: start; }
+@media (max-width: 1100px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+h1, h2 { font-family: var(--display); font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(30px, 5vw, 42px); line-height: 1.1; }
+h2 { font-size: clamp(22px, 3vw, 28px); line-height: 1.2; }
+p { margin: 0; max-width: 62ch; }
+.muted { color: var(--muted); }
+header { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr) auto; align-items: start; }
+header > :not(.theme) { grid-column: 1; }
+.theme {
+  grid-column: 2; grid-row: 1 / span 3; justify-self: end; display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--fg);
+  font: 600 13px var(--body); cursor: pointer;
+}
+.theme:hover { border-color: var(--muted); }
+.theme:focus-visible { outline: 2px solid var(--felt); outline-offset: 2px; }
+.theme svg { width: 16px; height: 16px; }
+.theme .sun, :root[data-theme="dark"] .theme .moon { display: none; }
+:root[data-theme="dark"] .theme .sun { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme .sun { display: block; }
+  :root:not([data-theme="light"]) .theme .moon { display: none; }
+}
+.theme .lbl-light, :root[data-theme="dark"] .theme .lbl-dark { display: none; }
+:root[data-theme="dark"] .theme .lbl-light { display: inline; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme .lbl-light { display: inline; }
+  :root:not([data-theme="light"]) .theme .lbl-dark { display: none; }
+}
+section { display: grid; gap: 16px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.scroll { overflow-x: auto; min-width: 0; }
+.segs { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg {
+  display: grid; gap: 2px; text-align: left; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--card); color: var(--fg); font: 600 14px var(--body); cursor: pointer; line-height: 1.2;
+}
+.seg small { font-weight: 400; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.seg:hover { border-color: var(--muted); }
+.seg.on { border-color: var(--felt); box-shadow: inset 0 0 0 1px var(--felt); }
+.seg.on small { color: var(--felt); }
+.seg:focus-visible { outline: 2px solid var(--felt); outline-offset: 2px; }
+.style-desc { font-size: 15px; }
+
+/* Range chart */
+table.range { border-collapse: separate; border-spacing: 2px; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+table.range th { font-weight: 500; font-size: 11px; color: var(--muted); padding: 2px; text-align: center; }
+table.range td {
+  width: 42px; height: 34px; min-width: 40px; text-align: center; font-size: 11px; font-weight: 500;
+  background: var(--fold); color: var(--fold-fg); border-radius: 4px;
+}
+table.range td.pair { font-weight: 700; }
+table.range td.play { background: var(--felt); color: var(--felt-fg); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; color: var(--muted); align-items: center; }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.swatch { width: 16px; height: 16px; border-radius: 3px; display: inline-block; }
+.swatch.on { background: var(--felt); }
+.swatch.off { background: var(--fold); border: 1px solid var(--line); }
+.notes { display: grid; gap: 6px; max-width: 70ch; font-size: 15px; }
+.notes li { margin-left: 1.1em; }
+
+/* Hand rankings */
+table.ranks { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 14px; }
+table.ranks th { text-align: left; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+table.ranks td { padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+table.ranks td.num { font-family: var(--mono); color: var(--muted); width: 2.5em; }
+table.ranks td.name { font-weight: 700; white-space: nowrap; }
+table.ranks td.name small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; white-space: normal; }
+table.ranks td.tie { color: var(--muted); font-size: 13px; }
+.hand { display: inline-flex; gap: 3px; }
+.card {
+  display: inline-grid; place-items: center; width: 28px; height: 38px; border-radius: 3px;
+  background: var(--card); border: 1px solid var(--line); color: var(--fg); line-height: 1;
+  font-family: var(--mono); box-shadow: 0 1px 2px rgba(0,0,0,.08);
+}
+.card b { font-size: 12px; font-weight: 700; }
+.card i { font-style: normal; font-size: 13px; }
+.card.red { color: var(--red); }
+.rule { font-size: 15px; max-width: 70ch; padding: 14px 16px; border-left: 3px solid var(--felt); background: var(--card); }
+</style>
+<style>
+html { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Texas Hold'em · beginner reference</div>
+    <h1>Which hands to play, and which hands win</h1>
+    <p class="muted">A tight starting-hand chart for micro-stakes cash games, plus the ten hand rankings with example cards.</p>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch between light and dark mode">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <span class="lbl-dark">Dark</span><span class="lbl-light">Light</span>
+    </button>
+  </header>
+
+  <div class="cols">
+  <section>
+    <h2>Pre-flop range chart</h2>
+    <p>Green means raise when you're first in; grey means fold. Pairs run down the diagonal, suited hands (same suit, marked <code>s</code>) sit above it, offsuit hands (marked <code>o</code>) sit below. T stands for 10.</p>
+    <div class="legend">
+      <span><i class="swatch on"></i> Play (raise ~3× the big blind)</span>
+      <span><i class="swatch off"></i> Fold</span>
+    </div>
+    <div class="segs" id="style-segs" role="group" aria-label="Style of play"><button type="button" class="seg on" data-style="tight" aria-pressed="true">Tight<small>21% of hands</small></button><button type="button" class="seg" data-style="balanced" aria-pressed="false">Balanced<small>27% of hands</small></button><button type="button" class="seg" data-style="loose" aria-pressed="false">Loose / aggressive<small>44% of hands</small></button></div>
+    <p class="style-desc muted" data-style="tight">The chart from your image. Few hands, almost all of them strong. Safest while you learn; what you should play from early seats.</p><p class="style-desc muted" data-style="balanced" hidden>A typical middle-position opening range at 100 big blinds. Adds more suited kings, suited connectors and the offsuit broadways.</p><p class="style-desc muted" data-style="loose" hidden>A button-style range. Any suited king, most suited connectors and gappers, and weak offsuit aces. Only works when you act last and opponents fold enough.</p>
+    <div class="scroll"><table class="range"><thead><tr><th></th><th>A</th><th>K</th><th>Q</th><th>J</th><th>T</th><th>9</th><th>8</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th></tr></thead><tbody>
+<tr><th>A</th><td class="pair play" data-hand="AA">AA</td><td class="suited play" data-hand="AKs">AKs</td><td class="suited play" data-hand="AQs">AQs</td><td class="suited play" data-hand="AJs">AJs</td><td class="suited play" data-hand="ATs">ATs</td><td class="suited play" data-hand="A9s">A9s</td><td class="suited play" data-hand="A8s">A8s</td><td class="suited play" data-hand="A7s">A7s</td><td class="suited play" data-hand="A6s">A6s</td><td class="suited play" data-hand="A5s">A5s</td><td class="suited play" data-hand="A4s">A4s</td><td class="suited play" data-hand="A3s">A3s</td><td class="suited play" data-hand="A2s">A2s</td></tr>
+<tr><th>K</th><td class="offsuit play" data-hand="AKo">AKo</td><td class="pair play" data-hand="KK">KK</td><td class="suited play" data-hand="KQs">KQs</td><td class="suited play" data-hand="KJs">KJs</td><td class="suited play" data-hand="KTs">KTs</td><td class="suited play" data-hand="K9s">K9s</td><td class="suited" data-hand="K8s">K8s</td><td class="suited" data-hand="K7s">K7s</td><td class="suited" data-hand="K6s">K6s</td><td class="suited" data-hand="K5s">K5s</td><td class="suited" data-hand="K4s">K4s</td><td class="suited" data-hand="K3s">K3s</td><td class="suited" data-hand="K2s">K2s</td></tr>
+<tr><th>Q</th><td class="offsuit play" data-hand="AQo">AQo</td><td class="offsuit play" data-hand="KQo">KQo</td><td class="pair play" data-hand="QQ">QQ</td><td class="suited play" data-hand="QJs">QJs</td><td class="suited play" data-hand="QTs">QTs</td><td class="suited play" data-hand="Q9s">Q9s</td><td class="suited" data-hand="Q8s">Q8s</td><td class="suited" data-hand="Q7s">Q7s</td><td class="suited" data-hand="Q6s">Q6s</td><td class="suited" data-hand="Q5s">Q5s</td><td class="suited" data-hand="Q4s">Q4s</td><td class="suited" data-hand="Q3s">Q3s</td><td class="suited" data-hand="Q2s">Q2s</td></tr>
+<tr><th>J</th><td class="offsuit play" data-hand="AJo">AJo</td><td class="offsuit play" data-hand="KJo">KJo</td><td class="offsuit play" data-hand="QJo">QJo</td><td class="pair play" data-hand="JJ">JJ</td><td class="suited play" data-hand="JTs">JTs</td><td class="suited play" data-hand="J9s">J9s</td><td class="suited play" data-hand="J8s">J8s</td><td class="suited" data-hand="J7s">J7s</td><td class="suited" data-hand="J6s">J6s</td><td class="suited" data-hand="J5s">J5s</td><td class="suited" data-hand="J4s">J4s</td><td class="suited" data-hand="J3s">J3s</td><td class="suited" data-hand="J2s">J2s</td></tr>
+<tr><th>T</th><td class="offsuit play" data-hand="ATo">ATo</td><td class="offsuit" data-hand="KTo">KTo</td><td class="offsuit" data-hand="QTo">QTo</td><td class="offsuit" data-hand="JTo">JTo</td><td class="pair play" data-hand="TT">TT</td><td class="suited play" data-hand="T9s">T9s</td><td class="suited play" data-hand="T8s">T8s</td><td class="suited" data-hand="T7s">T7s</td><td class="suited" data-hand="T6s">T6s</td><td class="suited" data-hand="T5s">T5s</td><td class="suited" data-hand="T4s">T4s</td><td class="suited" data-hand="T3s">T3s</td><td class="suited" data-hand="T2s">T2s</td></tr>
+<tr><th>9</th><td class="offsuit" data-hand="A9o">A9o</td><td class="offsuit" data-hand="K9o">K9o</td><td class="offsuit" data-hand="Q9o">Q9o</td><td class="offsuit" data-hand="J9o">J9o</td><td class="offsuit" data-hand="T9o">T9o</td><td class="pair play" data-hand="99">99</td><td class="suited play" data-hand="98s">98s</td><td class="suited" data-hand="97s">97s</td><td class="suited" data-hand="96s">96s</td><td class="suited" data-hand="95s">95s</td><td class="suited" data-hand="94s">94s</td><td class="suited" data-hand="93s">93s</td><td class="suited" data-hand="92s">92s</td></tr>
+<tr><th>8</th><td class="offsuit" data-hand="A8o">A8o</td><td class="offsuit" data-hand="K8o">K8o</td><td class="offsuit" data-hand="Q8o">Q8o</td><td class="offsuit" data-hand="J8o">J8o</td><td class="offsuit" data-hand="T8o">T8o</td><td class="offsuit" data-hand="98o">98o</td><td class="pair play" data-hand="88">88</td><td class="suited play" data-hand="87s">87s</td><td class="suited" data-hand="86s">86s</td><td class="suited" data-hand="85s">85s</td><td class="suited" data-hand="84s">84s</td><td class="suited" data-hand="83s">83s</td><td class="suited" data-hand="82s">82s</td></tr>
+<tr><th>7</th><td class="offsuit" data-hand="A7o">A7o</td><td class="offsuit" data-hand="K7o">K7o</td><td class="offsuit" data-hand="Q7o">Q7o</td><td class="offsuit" data-hand="J7o">J7o</td><td class="offsuit" data-hand="T7o">T7o</td><td class="offsuit" data-hand="97o">97o</td><td class="offsuit" data-hand="87o">87o</td><td class="pair play" data-hand="77">77</td><td class="suited play" data-hand="76s">76s</td><td class="suited" data-hand="75s">75s</td><td class="suited" data-hand="74s">74s</td><td class="suited" data-hand="73s">73s</td><td class="suited" data-hand="72s">72s</td></tr>
+<tr><th>6</th><td class="offsuit" data-hand="A6o">A6o</td><td class="offsuit" data-hand="K6o">K6o</td><td class="offsuit" data-hand="Q6o">Q6o</td><td class="offsuit" data-hand="J6o">J6o</td><td class="offsuit" data-hand="T6o">T6o</td><td class="offsuit" data-hand="96o">96o</td><td class="offsuit" data-hand="86o">86o</td><td class="offsuit" data-hand="76o">76o</td><td class="pair play" data-hand="66">66</td><td class="suited play" data-hand="65s">65s</td><td class="suited" data-hand="64s">64s</td><td class="suited" data-hand="63s">63s</td><td class="suited" data-hand="62s">62s</td></tr>
+<tr><th>5</th><td class="offsuit" data-hand="A5o">A5o</td><td class="offsuit" data-hand="K5o">K5o</td><td class="offsuit" data-hand="Q5o">Q5o</td><td class="offsuit" data-hand="J5o">J5o</td><td class="offsuit" data-hand="T5o">T5o</td><td class="offsuit" data-hand="95o">95o</td><td class="offsuit" data-hand="85o">85o</td><td class="offsuit" data-hand="75o">75o</td><td class="offsuit" data-hand="65o">65o</td><td class="pair play" data-hand="55">55</td><td class="suited play" data-hand="54s">54s</td><td class="suited" data-hand="53s">53s</td><td class="suited" data-hand="52s">52s</td></tr>
+<tr><th>4</th><td class="offsuit" data-hand="A4o">A4o</td><td class="offsuit" data-hand="K4o">K4o</td><td class="offsuit" data-hand="Q4o">Q4o</td><td class="offsuit" data-hand="J4o">J4o</td><td class="offsuit" data-hand="T4o">T4o</td><td class="offsuit" data-hand="94o">94o</td><td class="offsuit" data-hand="84o">84o</td><td class="offsuit" data-hand="74o">74o</td><td class="offsuit" data-hand="64o">64o</td><td class="offsuit" data-hand="54o">54o</td><td class="pair play" data-hand="44">44</td><td class="suited" data-hand="43s">43s</td><td class="suited" data-hand="42s">42s</td></tr>
+<tr><th>3</th><td class="offsuit" data-hand="A3o">A3o</td><td class="offsuit" data-hand="K3o">K3o</td><td class="offsuit" data-hand="Q3o">Q3o</td><td class="offsuit" data-hand="J3o">J3o</td><td class="offsuit" data-hand="T3o">T3o</td><td class="offsuit" data-hand="93o">93o</td><td class="offsuit" data-hand="83o">83o</td><td class="offsuit" data-hand="73o">73o</td><td class="offsuit" data-hand="63o">63o</td><td class="offsuit" data-hand="53o">53o</td><td class="offsuit" data-hand="43o">43o</td><td class="pair play" data-hand="33">33</td><td class="suited" data-hand="32s">32s</td></tr>
+<tr><th>2</th><td class="offsuit" data-hand="A2o">A2o</td><td class="offsuit" data-hand="K2o">K2o</td><td class="offsuit" data-hand="Q2o">Q2o</td><td class="offsuit" data-hand="J2o">J2o</td><td class="offsuit" data-hand="T2o">T2o</td><td class="offsuit" data-hand="92o">92o</td><td class="offsuit" data-hand="82o">82o</td><td class="offsuit" data-hand="72o">72o</td><td class="offsuit" data-hand="62o">62o</td><td class="offsuit" data-hand="52o">52o</td><td class="offsuit" data-hand="42o">42o</td><td class="offsuit" data-hand="32o">32o</td><td class="pair play" data-hand="22">22</td></tr>
+</tbody></table></div>
+    <ul class="notes muted">
+      <li>Position decides which style fits: tight from early seats and the blinds, balanced from the middle, loose only from the cutoff and button.</li>
+      <li><strong>s</strong> = same suit (A♥ 5♥), <strong>o</strong> = different suits (A♥ 5♣). A5s is a play and A5o is a fold: suited adds a nut-flush draw, so you can still win when the ace is a trap.</li>
+      <li>Facing a raise, tighten further: continue with pairs, A-K, A-Q, A-J, K-Q and the strong suited broadways; fold the rest.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Hand rankings</h2>
+    <p>Strongest at the top. A hand from a higher row always beats any hand from a lower row, whatever the cards: a pair of twos beats ace-high, a 6-high straight beats three aces, a 7-high flush beats an ace-high straight.</p>
+    <div class="scroll"><table class='ranks'><thead><tr><th>#</th><th>Hand</th><th>Example</th><th>Tie-break</th></tr></thead><tbody><tr><td class='num'>1</td><td class='name'>Royal flush<small>10-J-Q-K-A, all one suit</small></td><td><span class="hand"><span class="card"><b>T</b><i>♠</i></span><span class="card"><b>J</b><i>♠</i></span><span class="card"><b>Q</b><i>♠</i></span><span class="card"><b>K</b><i>♠</i></span><span class="card"><b>A</b><i>♠</i></span></span></td><td class='tie'>Unbeatable. Only a tie with another royal is possible.</td></tr>
+<tr><td class='num'>2</td><td class='name'>Straight flush<small>Five in a row, all one suit</small></td><td><span class="hand"><span class="card red"><b>5</b><i>♥</i></span><span class="card red"><b>6</b><i>♥</i></span><span class="card red"><b>7</b><i>♥</i></span><span class="card red"><b>8</b><i>♥</i></span><span class="card red"><b>9</b><i>♥</i></span></span></td><td class='tie'>Higher top card wins.</td></tr>
+<tr><td class='num'>3</td><td class='name'>Four of a kind<small>All four cards of one rank</small></td><td><span class="hand"><span class="card"><b>Q</b><i>♠</i></span><span class="card red"><b>Q</b><i>♥</i></span><span class="card red"><b>Q</b><i>♦</i></span><span class="card"><b>Q</b><i>♣</i></span><span class="card"><b>6</b><i>♠</i></span></span></td><td class='tie'>Higher quads win; the fifth card decides only when the quads are on the board.</td></tr>
+<tr><td class='num'>4</td><td class='name'>Full house<small>Three of a kind plus a pair</small></td><td><span class="hand"><span class="card"><b>9</b><i>♠</i></span><span class="card red"><b>9</b><i>♥</i></span><span class="card"><b>9</b><i>♣</i></span><span class="card red"><b>4</b><i>♦</i></span><span class="card"><b>4</b><i>♠</i></span></span></td><td class='tie'>Higher three-of-a-kind wins, then the higher pair.</td></tr>
+<tr><td class='num'>5</td><td class='name'>Flush<small>Five cards of one suit, any order</small></td><td><span class="hand"><span class="card"><b>K</b><i>♣</i></span><span class="card"><b>T</b><i>♣</i></span><span class="card"><b>7</b><i>♣</i></span><span class="card"><b>5</b><i>♣</i></span><span class="card"><b>2</b><i>♣</i></span></span></td><td class='tie'>Highest card wins, then the next, and so on.</td></tr>
+<tr><td class='num'>6</td><td class='name'>Straight<small>Five in a row, mixed suits</small></td><td><span class="hand"><span class="card"><b>4</b><i>♣</i></span><span class="card red"><b>5</b><i>♦</i></span><span class="card"><b>6</b><i>♠</i></span><span class="card red"><b>7</b><i>♥</i></span><span class="card"><b>8</b><i>♣</i></span></span></td><td class='tie'>Higher top card wins. Ace plays high (T-J-Q-K-A) or low (A-2-3-4-5).</td></tr>
+<tr><td class='num'>7</td><td class='name'>Three of a kind<small>Three cards of one rank</small></td><td><span class="hand"><span class="card"><b>7</b><i>♠</i></span><span class="card red"><b>7</b><i>♦</i></span><span class="card"><b>7</b><i>♣</i></span><span class="card red"><b>K</b><i>♥</i></span><span class="card"><b>2</b><i>♠</i></span></span></td><td class='tie'>Higher three wins, then kickers.</td></tr>
+<tr><td class='num'>8</td><td class='name'>Two pair<small>Two different pairs</small></td><td><span class="hand"><span class="card"><b>A</b><i>♠</i></span><span class="card red"><b>A</b><i>♦</i></span><span class="card"><b>9</b><i>♣</i></span><span class="card red"><b>9</b><i>♥</i></span><span class="card"><b>4</b><i>♠</i></span></span></td><td class='tie'>Higher top pair wins, then the second pair, then the kicker.</td></tr>
+<tr><td class='num'>9</td><td class='name'>One pair<small>Two cards of one rank</small></td><td><span class="hand"><span class="card"><b>K</b><i>♠</i></span><span class="card red"><b>K</b><i>♦</i></span><span class="card"><b>9</b><i>♣</i></span><span class="card red"><b>6</b><i>♥</i></span><span class="card"><b>3</b><i>♠</i></span></span></td><td class='tie'>Higher pair wins, then the highest side card (kicker).</td></tr>
+<tr><td class='num'>10</td><td class='name'>High card<small>Nothing connects</small></td><td><span class="hand"><span class="card"><b>A</b><i>♠</i></span><span class="card red"><b>J</b><i>♦</i></span><span class="card"><b>8</b><i>♣</i></span><span class="card red"><b>5</b><i>♥</i></span><span class="card"><b>2</b><i>♠</i></span></span></td><td class='tie'>Highest card wins, then the next, and so on.</td></tr></tbody></table></div>
+    <p class="rule">You make your best five cards from seven: your two hole cards plus the five on the board, in any combination. You can use both, one, or none of your own cards.</p>
+  </section>
+  </div>
+</main>
+<script>
+(function () {
+  var RANGES = {"tight": ["22", "33", "44", "54s", "55", "65s", "66", "76s", "77", "87s", "88", "98s", "99", "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "AA", "AJo", "AJs", "AKo", "AKs", "AQo", "AQs", "ATo", "ATs", "J8s", "J9s", "JJ", "JTs", "K9s", "KJo", "KJs", "KK", "KQo", "KQs", "KTs", "Q9s", "QJo", "QJs", "QQ", "QTs", "T8s", "T9s", "TT"], "balanced": ["22", "33", "44", "54s", "55", "64s", "65s", "66", "75s", "76s", "77", "86s", "87s", "88", "97s", "98s", "99", "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9o", "A9s", "AA", "AJo", "AJs", "AKo", "AKs", "AQo", "AQs", "ATo", "ATs", "J8s", "J9s", "JJ", "JTo", "JTs", "K5s", "K6s", "K7s", "K8s", "K9s", "KJo", "KJs", "KK", "KQo", "KQs", "KTo", "KTs", "Q8s", "Q9s", "QJo", "QJs", "QQ", "QTo", "QTs", "T8s", "T9s", "TT"], "loose": ["22", "33", "43s", "44", "53s", "54s", "55", "63s", "64s", "65s", "66", "74s", "75s", "76s", "77", "85s", "86s", "87s", "88", "96s", "97s", "98o", "98s", "99", "A2o", "A2s", "A3o", "A3s", "A4o", "A4s", "A5o", "A5s", "A6o", "A6s", "A7o", "A7s", "A8o", "A8s", "A9o", "A9s", "AA", "AJo", "AJs", "AKo", "AKs", "AQo", "AQs", "ATo", "ATs", "J6s", "J7s", "J8s", "J9o", "J9s", "JJ", "JTo", "JTs", "K2s", "K3s", "K4s", "K5s", "K6s", "K7s", "K8o", "K8s", "K9o", "K9s", "KJo", "KJs", "KK", "KQo", "KQs", "KTo", "KTs", "Q4s", "Q5s", "Q6s", "Q7s", "Q8s", "Q9o", "Q9s", "QJo", "QJs", "QQ", "QTo", "QTs", "T6s", "T7s", "T8s", "T9o", "T9s", "TT"]};
+  var segs = document.getElementById('style-segs');
+  var cells = document.querySelectorAll('table.range td[data-hand]');
+  var descs = document.querySelectorAll('.style-desc');
+  var SKEY = 'holdem-ref-style';
+  function applyStyle(name) {
+    if (!RANGES[name]) name = 'tight';
+    var set = {};
+    RANGES[name].forEach(function (h) { set[h] = true; });
+    cells.forEach(function (td) { td.classList.toggle('play', !!set[td.getAttribute('data-hand')]); });
+    segs.querySelectorAll('.seg').forEach(function (b) {
+      var on = b.getAttribute('data-style') === name;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    descs.forEach(function (p) { p.hidden = p.getAttribute('data-style') !== name; });
+  }
+  segs.addEventListener('click', function (e) {
+    var b = e.target.closest('.seg');
+    if (!b) return;
+    var name = b.getAttribute('data-style');
+    applyStyle(name);
+    try { localStorage.setItem(SKEY, name); } catch (err) {}
+  });
+  try {
+    var savedStyle = localStorage.getItem(SKEY);
+    if (savedStyle && RANGES[savedStyle]) applyStyle(savedStyle);
+  } catch (e) {}
+
+  var root = document.documentElement;
+  var btn = document.getElementById('theme-toggle');
+  var KEY = 'holdem-ref-theme';
+  try {
+    var saved = localStorage.getItem(KEY);
+    if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+  } catch (e) {}
+  function current() {
+    var t = root.getAttribute('data-theme');
+    if (t === 'light' || t === 'dark') return t;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  btn.addEventListener('click', function () {
+    var next = current() === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(KEY, next); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
