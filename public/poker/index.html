@@ -102,6 +102,20 @@ section { display: grid; gap: 16px; }
 .seg.on small { color: var(--felt); }
 .seg:focus-visible { outline: 2px solid var(--felt); outline-offset: 2px; }
 .style-desc { font-size: 15px; }
+.pos-row { display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; }
+.seg { grid-template-columns: auto 1fr; align-items: center; column-gap: 10px; }
+.seg .seg-txt { display: grid; gap: 2px; }
+.mini-table { width: 72px; height: auto; display: block; }
+.table-fig { margin: 0; display: grid; gap: 4px; max-width: 280px; min-width: 0; }
+.table-diagram { width: 100%; max-width: 280px; height: auto; display: block; }
+.table-fig figcaption { font-size: 12px; color: var(--muted); line-height: 1.3; }
+.table-diagram .felt, .mini-table .felt { fill: var(--felt); opacity: .25; stroke: var(--felt); stroke-width: 1.5; }
+.table-diagram .seat circle, .mini-table .seat circle { fill: var(--fold); stroke: var(--line); stroke-width: 1; }
+.table-diagram .seat text { font: 600 6.5px var(--mono); fill: var(--fold-fg); text-anchor: middle; }
+.table-diagram .seat.on circle, .mini-table .seat.on circle { fill: var(--felt); stroke: var(--felt); }
+.table-diagram .seat.on text { fill: var(--felt-fg); }
+.table-diagram .dealer circle, .mini-table .dealer circle { fill: var(--card); stroke: var(--fg); stroke-width: 1; }
+.table-diagram .dealer text { font: 700 6px var(--mono); fill: var(--fg); text-anchor: middle; }
 
 /* Range chart */
 table.range { width: 100%; min-width: 560px; table-layout: fixed; border-collapse: separate; border-spacing: 3px; font-family: var(--mono); font-variant-numeric: tabular-nums; }
@@ -255,7 +269,10 @@ img { max-width: 100%; }
         <span><i class="swatch cond"></i> Raise if the table is weak and nobody 3-bets</span>
         <span><i class="swatch off"></i> Fold</span>
       </div>
-      <div class="segs" id="style-segs" role="group" aria-label="Position"><button type="button" class="seg on" data-style="ep" aria-pressed="true">Early position<small>raise 12.7% · +6.8% if weak table</small></button><button type="button" class="seg" data-style="mp" aria-pressed="false">Middle position<small>raise 15.5% · +5.4% if weak table</small></button></div>
+      <div class="pos-row">
+        <div class="segs" id="style-segs" role="group" aria-label="Position"><button type="button" class="seg on" data-style="ep" aria-pressed="true"><svg class="mini-table" viewBox="0 0 220 124" aria-hidden="true"><ellipse class="felt" cx="110" cy="62" rx="68" ry="30"/><g class="seat late" data-pos="late"><circle cx="141.5" cy="107.1" r="9"/></g><g class="dealer"><circle cx="130.5" cy="84.6" r="4"/></g><g class="seat blind" data-pos="blind"><circle cx="78.5" cy="107.1" r="9"/></g><g class="seat blind" data-pos="blind"><circle cx="30.3" cy="86.0" r="9"/></g><g class="seat ep on" data-pos="ep"><circle cx="19.4" cy="53.7" r="9"/></g><g class="seat ep on" data-pos="ep"><circle cx="50.9" cy="25.2" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="110.0" cy="14.0" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="169.1" cy="25.2" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="200.6" cy="53.7" r="9"/></g><g class="seat late" data-pos="late"><circle cx="189.7" cy="86.0" r="9"/></g></svg><span class="seg-txt">Early position<small>raise 12.7% · +6.8% if weak table</small></span></button><button type="button" class="seg" data-style="mp" aria-pressed="false"><svg class="mini-table" viewBox="0 0 220 124" aria-hidden="true"><ellipse class="felt" cx="110" cy="62" rx="68" ry="30"/><g class="seat late" data-pos="late"><circle cx="141.5" cy="107.1" r="9"/></g><g class="dealer"><circle cx="130.5" cy="84.6" r="4"/></g><g class="seat blind" data-pos="blind"><circle cx="78.5" cy="107.1" r="9"/></g><g class="seat blind" data-pos="blind"><circle cx="30.3" cy="86.0" r="9"/></g><g class="seat ep" data-pos="ep"><circle cx="19.4" cy="53.7" r="9"/></g><g class="seat ep" data-pos="ep"><circle cx="50.9" cy="25.2" r="9"/></g><g class="seat mp on" data-pos="mp"><circle cx="110.0" cy="14.0" r="9"/></g><g class="seat mp on" data-pos="mp"><circle cx="169.1" cy="25.2" r="9"/></g><g class="seat mp on" data-pos="mp"><circle cx="200.6" cy="53.7" r="9"/></g><g class="seat late" data-pos="late"><circle cx="189.7" cy="86.0" r="9"/></g></svg><span class="seg-txt">Middle position<small>raise 15.5% · +5.4% if weak table</small></span></button></div>
+        <figure class="table-fig"><svg class="table-diagram" viewBox="0 0 220 124" aria-hidden="true"><ellipse class="felt" cx="110" cy="62" rx="68" ry="30"/><g class="seat late" data-pos="late"><circle cx="141.5" cy="107.1" r="12"/><text x="141.5" y="109.6">BTN</text></g><g class="dealer"><circle cx="130.5" cy="84.6" r="6"/><text x="130.5" y="86.8">D</text></g><g class="seat blind" data-pos="blind"><circle cx="78.5" cy="107.1" r="12"/><text x="78.5" y="109.6">SB</text></g><g class="seat blind" data-pos="blind"><circle cx="30.3" cy="86.0" r="12"/><text x="30.3" y="88.5">BB</text></g><g class="seat ep on" data-pos="ep"><circle cx="19.4" cy="53.7" r="12"/><text x="19.4" y="56.2">UTG</text></g><g class="seat ep on" data-pos="ep"><circle cx="50.9" cy="25.2" r="12"/><text x="50.9" y="27.7">UTG+1</text></g><g class="seat mp" data-pos="mp"><circle cx="110.0" cy="14.0" r="12"/><text x="110.0" y="16.5">MP</text></g><g class="seat mp" data-pos="mp"><circle cx="169.1" cy="25.2" r="12"/><text x="169.1" y="27.7">LJ</text></g><g class="seat mp" data-pos="mp"><circle cx="200.6" cy="53.7" r="12"/><text x="200.6" y="56.2">HJ</text></g><g class="seat late" data-pos="late"><circle cx="189.7" cy="86.0" r="12"/><text x="189.7" y="88.5">CO</text></g></svg><figcaption>Action moves clockwise from the dealer button (D). Highlighted seats are the ones this chart is for.</figcaption></figure>
+      </div>
       <p class="style-desc muted" data-style="ep">First seats after the blinds (UTG, UTG+1). Many players still to act behind you, so only the strongest hands open. Suited aces and pairs come in because they play well against the wide range of hands that call.</p><p class="style-desc muted" data-style="mp" hidden>The next few seats (MP, HJ). Fewer players behind, so add A8s, KQo, ATo, J9s and 44 to the open-raise list; the small suited connectors stay conditional.</p>
     </div>
     <div class="scroll row-table"><table class="range"><thead><tr><th></th><th>A</th><th>K</th><th>Q</th><th>J</th><th>T</th><th>9</th><th>8</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th></tr></thead><tbody>
@@ -376,6 +393,9 @@ img { max-width: 100%; }
       b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
     descs.forEach(function (p) { p.hidden = p.getAttribute('data-style') !== name; });
+    document.querySelectorAll('.table-diagram .seat').forEach(function (g) {
+      g.classList.toggle('on', g.getAttribute('data-pos') === name);
+    });
   }
   segs.addEventListener('click', function (e) {
     var b = e.target.closest('.seg');
