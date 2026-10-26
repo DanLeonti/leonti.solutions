@@ -22,6 +22,8 @@
   --red: #c62d2d;
   --cond: #e8c547;
   --cond-fg: #2a2300;
+  --limp: #3aa6c9;
+  --limp-fg: #ffffff;
   --display: "Fraunces", Georgia, serif;
   --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
   --mono: "JetBrains Mono", "SF Mono", Consolas, monospace;
@@ -29,13 +31,13 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #15181a; --fg: #ebe9e1; --muted: #9ba097; --line: #2d3235; --card: #1d2124;
-    --felt: #2f9353; --felt-fg: #ffffff; --fold: #262b2e; --fold-fg: #7d837c; --red: #ef6161; --cond: #d9b63a; --cond-fg: #1f1a00;
+    --felt: #2f9353; --felt-fg: #ffffff; --fold: #262b2e; --fold-fg: #7d837c; --red: #ef6161; --cond: #d9b63a; --cond-fg: #1f1a00; --limp: #2f8fb0; --limp-fg: #ffffff;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #15181a; --fg: #ebe9e1; --muted: #9ba097; --line: #2d3235; --card: #1d2124;
-  --felt: #2f9353; --felt-fg: #ffffff; --fold: #262b2e; --fold-fg: #7d837c; --red: #ef6161; --cond: #d9b63a; --cond-fg: #1f1a00;
+  --felt: #2f9353; --felt-fg: #ffffff; --fold: #262b2e; --fold-fg: #7d837c; --red: #ef6161; --cond: #d9b63a; --cond-fg: #1f1a00; --limp: #2f8fb0; --limp-fg: #ffffff;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -103,6 +105,8 @@ section { display: grid; gap: 16px; }
 .seg:focus-visible { outline: 2px solid var(--felt); outline-offset: 2px; }
 .style-desc { font-size: 15px; }
 .pos-row { display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; }
+.segs { display: grid; grid-template-columns: 1fr 1fr; }
+@media (max-width: 480px) { .segs { grid-template-columns: 1fr; } }
 .seg { grid-template-columns: auto 1fr; align-items: center; column-gap: 10px; }
 .seg .seg-txt { display: grid; gap: 2px; }
 .mini-table { width: 72px; height: auto; display: block; }
@@ -128,6 +132,8 @@ table.range td {
 table.range td.pair { font-weight: 700; }
 table.range td.play { background: var(--felt); color: var(--felt-fg); }
 table.range td.cond { background: var(--cond); color: var(--cond-fg); }
+table.range td.limp { background: var(--limp); color: var(--limp-fg); }
+table.range td.cond.limp { background: var(--cond); color: var(--cond-fg); box-shadow: inset 0 0 0 3px var(--limp); }
 table.range td:hover, table.range td.hot { outline: 2px solid var(--fg); outline-offset: -2px; }
 .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; color: var(--muted); align-items: center; }
 .legend span { display: inline-flex; align-items: center; gap: 8px; }
@@ -135,6 +141,10 @@ table.range td:hover, table.range td.hot { outline: 2px solid var(--fg); outline
 .swatch.on { background: var(--felt); }
 .swatch.off { background: var(--fold); border: 1px solid var(--line); }
 .swatch.cond { background: var(--cond); }
+.swatch.limp { background: var(--limp); }
+.swatch.cond.limp { background: var(--cond); box-shadow: inset 0 0 0 3px var(--limp); }
+.tip .t-act.limp { background: var(--limp); color: var(--limp-fg); }
+.tip .t-act.cond.limp { background: var(--cond); color: var(--cond-fg); box-shadow: inset 0 0 0 2px var(--limp); }
 .tip .t-act.cond { background: var(--cond); color: var(--cond-fg); }
 .notes { display: grid; gap: 6px; max-width: 70ch; font-size: 15px; }
 .notes li { margin-left: 1.1em; }
@@ -262,18 +272,18 @@ img { max-width: 100%; }
   <div class="cols">
   <section class="col-a">
     <h2>Pre-flop range chart</h2>
-    <p>What to do when nobody has entered the pot yet, with 100 big blinds. Green: raise. Yellow: raise only if the table is weak and rarely 3-bets; otherwise fold. Grey: fold. Pairs run down the diagonal, suited hands (<code>s</code>) sit above it, offsuit hands (<code>o</code>) below. T stands for 10.</p>
+    <p>Opening ranges with 100 big blinds, by seat. Green: raise. Yellow: raise only against weak opponents. Blue: limp. Grey: fold. Pairs run down the diagonal, suited hands (<code>s</code>) sit above it, offsuit hands (<code>o</code>) below. T stands for 10.</p>
     <div class="controls">
-      <div class="legend">
+      <div class="legend" id="legend">
         <span><i class="swatch on"></i> Raise</span>
         <span><i class="swatch cond"></i> Raise if the table is weak and nobody 3-bets</span>
         <span><i class="swatch off"></i> Fold</span>
       </div>
       <div class="pos-row">
-        <div class="segs" id="style-segs" role="group" aria-label="Position"><button type="button" class="seg on" data-style="ep" aria-pressed="true"><svg class="mini-table" viewBox="0 0 220 124" aria-hidden="true"><ellipse class="felt" cx="110" cy="62" rx="68" ry="30"/><g class="seat late" data-pos="late"><circle cx="141.5" cy="107.1" r="9"/></g><g class="dealer"><circle cx="130.5" cy="84.6" r="4"/></g><g class="seat blind" data-pos="blind"><circle cx="78.5" cy="107.1" r="9"/></g><g class="seat blind" data-pos="blind"><circle cx="30.3" cy="86.0" r="9"/></g><g class="seat ep on" data-pos="ep"><circle cx="19.4" cy="53.7" r="9"/></g><g class="seat ep on" data-pos="ep"><circle cx="50.9" cy="25.2" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="110.0" cy="14.0" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="169.1" cy="25.2" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="200.6" cy="53.7" r="9"/></g><g class="seat late" data-pos="late"><circle cx="189.7" cy="86.0" r="9"/></g></svg><span class="seg-txt">Early position<small>raise 12.7% · +6.8% if weak table</small></span></button><button type="button" class="seg" data-style="mp" aria-pressed="false"><svg class="mini-table" viewBox="0 0 220 124" aria-hidden="true"><ellipse class="felt" cx="110" cy="62" rx="68" ry="30"/><g class="seat late" data-pos="late"><circle cx="141.5" cy="107.1" r="9"/></g><g class="dealer"><circle cx="130.5" cy="84.6" r="4"/></g><g class="seat blind" data-pos="blind"><circle cx="78.5" cy="107.1" r="9"/></g><g class="seat blind" data-pos="blind"><circle cx="30.3" cy="86.0" r="9"/></g><g class="seat ep" data-pos="ep"><circle cx="19.4" cy="53.7" r="9"/></g><g class="seat ep" data-pos="ep"><circle cx="50.9" cy="25.2" r="9"/></g><g class="seat mp on" data-pos="mp"><circle cx="110.0" cy="14.0" r="9"/></g><g class="seat mp on" data-pos="mp"><circle cx="169.1" cy="25.2" r="9"/></g><g class="seat mp on" data-pos="mp"><circle cx="200.6" cy="53.7" r="9"/></g><g class="seat late" data-pos="late"><circle cx="189.7" cy="86.0" r="9"/></g></svg><span class="seg-txt">Middle position<small>raise 15.5% · +5.4% if weak table</small></span></button></div>
-        <figure class="table-fig"><svg class="table-diagram" viewBox="0 0 220 124" aria-hidden="true"><ellipse class="felt" cx="110" cy="62" rx="68" ry="30"/><g class="seat late" data-pos="late"><circle cx="141.5" cy="107.1" r="12"/><text x="141.5" y="109.6">BTN</text></g><g class="dealer"><circle cx="130.5" cy="84.6" r="6"/><text x="130.5" y="86.8">D</text></g><g class="seat blind" data-pos="blind"><circle cx="78.5" cy="107.1" r="12"/><text x="78.5" y="109.6">SB</text></g><g class="seat blind" data-pos="blind"><circle cx="30.3" cy="86.0" r="12"/><text x="30.3" y="88.5">BB</text></g><g class="seat ep on" data-pos="ep"><circle cx="19.4" cy="53.7" r="12"/><text x="19.4" y="56.2">UTG</text></g><g class="seat ep on" data-pos="ep"><circle cx="50.9" cy="25.2" r="12"/><text x="50.9" y="27.7">UTG+1</text></g><g class="seat mp" data-pos="mp"><circle cx="110.0" cy="14.0" r="12"/><text x="110.0" y="16.5">MP</text></g><g class="seat mp" data-pos="mp"><circle cx="169.1" cy="25.2" r="12"/><text x="169.1" y="27.7">LJ</text></g><g class="seat mp" data-pos="mp"><circle cx="200.6" cy="53.7" r="12"/><text x="200.6" y="56.2">HJ</text></g><g class="seat late" data-pos="late"><circle cx="189.7" cy="86.0" r="12"/><text x="189.7" y="88.5">CO</text></g></svg><figcaption>Action moves clockwise from the dealer button (D). Highlighted seats are the ones this chart is for.</figcaption></figure>
+        <div class="segs" id="style-segs" role="group" aria-label="Position"><button type="button" class="seg on" data-style="ep" aria-pressed="true"><svg class="mini-table" viewBox="0 0 220 124" aria-hidden="true"><ellipse class="felt" cx="110" cy="62" rx="68" ry="30"/><g class="seat lp" data-pos="lp"><circle cx="141.5" cy="107.1" r="9"/></g><g class="dealer"><circle cx="130.5" cy="84.6" r="4"/></g><g class="seat sb" data-pos="sb"><circle cx="78.5" cy="107.1" r="9"/></g><g class="seat bb" data-pos="bb"><circle cx="30.3" cy="86.0" r="9"/></g><g class="seat ep on" data-pos="ep"><circle cx="19.4" cy="53.7" r="9"/></g><g class="seat ep on" data-pos="ep"><circle cx="50.9" cy="25.2" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="110.0" cy="14.0" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="169.1" cy="25.2" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="200.6" cy="53.7" r="9"/></g><g class="seat lp" data-pos="lp"><circle cx="189.7" cy="86.0" r="9"/></g></svg><span class="seg-txt">Early position<small>raise 12.7% · +6.8%</small></span></button><button type="button" class="seg" data-style="mp" aria-pressed="false"><svg class="mini-table" viewBox="0 0 220 124" aria-hidden="true"><ellipse class="felt" cx="110" cy="62" rx="68" ry="30"/><g class="seat lp" data-pos="lp"><circle cx="141.5" cy="107.1" r="9"/></g><g class="dealer"><circle cx="130.5" cy="84.6" r="4"/></g><g class="seat sb" data-pos="sb"><circle cx="78.5" cy="107.1" r="9"/></g><g class="seat bb" data-pos="bb"><circle cx="30.3" cy="86.0" r="9"/></g><g class="seat ep" data-pos="ep"><circle cx="19.4" cy="53.7" r="9"/></g><g class="seat ep" data-pos="ep"><circle cx="50.9" cy="25.2" r="9"/></g><g class="seat mp on" data-pos="mp"><circle cx="110.0" cy="14.0" r="9"/></g><g class="seat mp on" data-pos="mp"><circle cx="169.1" cy="25.2" r="9"/></g><g class="seat mp on" data-pos="mp"><circle cx="200.6" cy="53.7" r="9"/></g><g class="seat lp" data-pos="lp"><circle cx="189.7" cy="86.0" r="9"/></g></svg><span class="seg-txt">Middle position<small>raise 15.5% · +5.4%</small></span></button><button type="button" class="seg" data-style="lp" aria-pressed="false"><svg class="mini-table" viewBox="0 0 220 124" aria-hidden="true"><ellipse class="felt" cx="110" cy="62" rx="68" ry="30"/><g class="seat lp on" data-pos="lp"><circle cx="141.5" cy="107.1" r="9"/></g><g class="dealer"><circle cx="130.5" cy="84.6" r="4"/></g><g class="seat sb" data-pos="sb"><circle cx="78.5" cy="107.1" r="9"/></g><g class="seat bb" data-pos="bb"><circle cx="30.3" cy="86.0" r="9"/></g><g class="seat ep" data-pos="ep"><circle cx="19.4" cy="53.7" r="9"/></g><g class="seat ep" data-pos="ep"><circle cx="50.9" cy="25.2" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="110.0" cy="14.0" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="169.1" cy="25.2" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="200.6" cy="53.7" r="9"/></g><g class="seat lp on" data-pos="lp"><circle cx="189.7" cy="86.0" r="9"/></g></svg><span class="seg-txt">Late position<small>raise 19.8% · +14.2%</small></span></button><button type="button" class="seg" data-style="sb" aria-pressed="false"><svg class="mini-table" viewBox="0 0 220 124" aria-hidden="true"><ellipse class="felt" cx="110" cy="62" rx="68" ry="30"/><g class="seat lp" data-pos="lp"><circle cx="141.5" cy="107.1" r="9"/></g><g class="dealer"><circle cx="130.5" cy="84.6" r="4"/></g><g class="seat sb on" data-pos="sb"><circle cx="78.5" cy="107.1" r="9"/></g><g class="seat bb" data-pos="bb"><circle cx="30.3" cy="86.0" r="9"/></g><g class="seat ep" data-pos="ep"><circle cx="19.4" cy="53.7" r="9"/></g><g class="seat ep" data-pos="ep"><circle cx="50.9" cy="25.2" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="110.0" cy="14.0" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="169.1" cy="25.2" r="9"/></g><g class="seat mp" data-pos="mp"><circle cx="200.6" cy="53.7" r="9"/></g><g class="seat lp" data-pos="lp"><circle cx="189.7" cy="86.0" r="9"/></g></svg><span class="seg-txt">Small blind<small>raise 6.6% · +3.0% · limp 68.6%</small></span></button></div>
+        <figure class="table-fig"><svg class="table-diagram" viewBox="0 0 220 124" aria-hidden="true"><ellipse class="felt" cx="110" cy="62" rx="68" ry="30"/><g class="seat lp" data-pos="lp"><circle cx="141.5" cy="107.1" r="12"/><text x="141.5" y="109.6">BTN</text></g><g class="dealer"><circle cx="130.5" cy="84.6" r="6"/><text x="130.5" y="86.8">D</text></g><g class="seat sb" data-pos="sb"><circle cx="78.5" cy="107.1" r="12"/><text x="78.5" y="109.6">SB</text></g><g class="seat bb" data-pos="bb"><circle cx="30.3" cy="86.0" r="12"/><text x="30.3" y="88.5">BB</text></g><g class="seat ep on" data-pos="ep"><circle cx="19.4" cy="53.7" r="12"/><text x="19.4" y="56.2">UTG</text></g><g class="seat ep on" data-pos="ep"><circle cx="50.9" cy="25.2" r="12"/><text x="50.9" y="27.7">UTG+1</text></g><g class="seat mp" data-pos="mp"><circle cx="110.0" cy="14.0" r="12"/><text x="110.0" y="16.5">MP</text></g><g class="seat mp" data-pos="mp"><circle cx="169.1" cy="25.2" r="12"/><text x="169.1" y="27.7">LJ</text></g><g class="seat mp" data-pos="mp"><circle cx="200.6" cy="53.7" r="12"/><text x="200.6" y="56.2">HJ</text></g><g class="seat lp" data-pos="lp"><circle cx="189.7" cy="86.0" r="12"/><text x="189.7" y="88.5">CO</text></g></svg><figcaption>Action moves clockwise from the dealer button (D). Highlighted seats are the ones this chart is for.</figcaption></figure>
       </div>
-      <p class="style-desc muted" data-style="ep">First seats after the blinds (UTG, UTG+1). Many players still to act behind you, so only the strongest hands open. Suited aces and pairs come in because they play well against the wide range of hands that call.</p><p class="style-desc muted" data-style="mp" hidden>The next few seats (MP, HJ). Fewer players behind, so add A8s, KQo, ATo, J9s and 44 to the open-raise list; the small suited connectors stay conditional.</p>
+      <p class="style-desc muted" data-style="ep">First seats after the blinds (UTG, UTG+1). Many players still to act behind you, so only the strongest hands open. Suited aces and pairs come in because they play well against the wide range of hands that call.</p><p class="style-desc muted" data-style="mp" hidden>The next few seats (MP, LJ, HJ). Fewer players behind, so add A8s, KQo, ATo, J9s and 44 to the open-raise list; the small suited connectors stay conditional.</p><p class="style-desc muted" data-style="lp" hidden>Cutoff and button. You act last on every street after the flop, so the range widens a lot: every suited ace, most suited kings, connectors and one-gappers. Yellow hands are raises only when the players who limped in are weak and fold easily after the flop; the blue-marked ones can also just limp behind them.</p><p class="style-desc muted" data-style="sb" hidden>Small blind with limpers in front of you. Raise only the premium hands, since you'll be out of position for the whole hand. With the big blue range, just complete: it costs half a bet to see a flop. Fold the junk.</p>
     </div>
     <div class="scroll row-table"><table class="range"><thead><tr><th></th><th>A</th><th>K</th><th>Q</th><th>J</th><th>T</th><th>9</th><th>8</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th></tr></thead><tbody>
 <tr><th>A</th><td class="pair play" data-hand="AA">AA</td><td class="suited play" data-hand="AKs">AKs</td><td class="suited play" data-hand="AQs">AQs</td><td class="suited play" data-hand="AJs">AJs</td><td class="suited play" data-hand="ATs">ATs</td><td class="suited play" data-hand="A9s">A9s</td><td class="suited cond" data-hand="A8s">A8s</td><td class="suited cond" data-hand="A7s">A7s</td><td class="suited cond" data-hand="A6s">A6s</td><td class="suited play" data-hand="A5s">A5s</td><td class="suited play" data-hand="A4s">A4s</td><td class="suited play" data-hand="A3s">A3s</td><td class="suited play" data-hand="A2s">A2s</td></tr>
@@ -291,7 +301,7 @@ img { max-width: 100%; }
 <tr><th>2</th><td class="offsuit" data-hand="A2o">A2o</td><td class="offsuit" data-hand="K2o">K2o</td><td class="offsuit" data-hand="Q2o">Q2o</td><td class="offsuit" data-hand="J2o">J2o</td><td class="offsuit" data-hand="T2o">T2o</td><td class="offsuit" data-hand="92o">92o</td><td class="offsuit" data-hand="82o">82o</td><td class="offsuit" data-hand="72o">72o</td><td class="offsuit" data-hand="62o">62o</td><td class="offsuit" data-hand="52o">52o</td><td class="offsuit" data-hand="42o">42o</td><td class="offsuit" data-hand="32o">32o</td><td class="pair cond" data-hand="22">22</td></tr>
 </tbody></table></div>
     <ul class="notes muted">
-      <li>Later seats (cutoff, button) open wider than either chart; the blinds play tighter and mostly defend rather than open.</li>
+      <li>The big blind has no opening chart: you already have a bet in, so you only check (free flop) or react to a raise.</li>
       <li><strong>s</strong> = same suit (A♥ 5♥), <strong>o</strong> = different suits (A♥ 5♣). A5s is a play and A5o is a fold: suited adds a nut-flush draw, so you can still win when the ace is a trap.</li>
       <li>Facing a raise, tighten further: continue with pairs, A-K, A-Q, A-J, K-Q and the strong suited broadways; fold the rest.</li>
     </ul>
@@ -372,21 +382,27 @@ img { max-width: 100%; }
 </main>
 <script>
 (function () {
-  var RANGES = {"ep": {"raise": ["55", "66", "77", "87s", "88", "98s", "99", "A2s", "A3s", "A4s", "A5s", "A9s", "AA", "AJo", "AJs", "AKo", "AKs", "AQo", "AQs", "ATs", "JJ", "JTs", "KJs", "KK", "KQs", "KTs", "QJs", "QQ", "QTs", "T9s", "TT"], "cond": ["22", "33", "44", "54s", "65s", "76s", "86s", "97s", "A6s", "A7s", "A8s", "ATo", "J9s", "K9s", "KQo", "Q9s", "T8s"]}, "mp": {"raise": ["44", "55", "66", "77", "87s", "88", "98s", "99", "A2s", "A3s", "A4s", "A5s", "A8s", "A9s", "AA", "AJo", "AJs", "AKo", "AKs", "AQo", "AQs", "ATo", "ATs", "J9s", "JJ", "JTs", "KJs", "KK", "KQo", "KQs", "KTs", "QJs", "QQ", "QTs", "T9s", "TT"], "cond": ["22", "33", "54s", "65s", "75s", "76s", "86s", "97s", "A6s", "A7s", "K8s", "K9s", "KJo", "Q9s", "T8s"]}};
+  var RANGES = {"ep": {"tiers": [{"cls": "play", "legend": "Raise", "tip": "Raise", "hands": ["55", "66", "77", "87s", "88", "98s", "99", "A2s", "A3s", "A4s", "A5s", "A9s", "AA", "AJo", "AJs", "AKo", "AKs", "AQo", "AQs", "ATs", "JJ", "JTs", "KJs", "KK", "KQs", "KTs", "QJs", "QQ", "QTs", "T9s", "TT"]}, {"cls": "cond", "legend": "Raise if the table is weak and nobody 3-bets", "tip": "Raise vs. weak table", "hands": ["22", "33", "44", "54s", "65s", "76s", "86s", "97s", "A6s", "A7s", "A8s", "ATo", "J9s", "K9s", "KQo", "Q9s", "T8s"]}]}, "mp": {"tiers": [{"cls": "play", "legend": "Raise", "tip": "Raise", "hands": ["44", "55", "66", "77", "87s", "88", "98s", "99", "A2s", "A3s", "A4s", "A5s", "A8s", "A9s", "AA", "AJo", "AJs", "AKo", "AKs", "AQo", "AQs", "ATo", "ATs", "J9s", "JJ", "JTs", "KJs", "KK", "KQo", "KQs", "KTs", "QJs", "QQ", "QTs", "T9s", "TT"]}, {"cls": "cond", "legend": "Raise if the table is weak and nobody 3-bets", "tip": "Raise vs. weak table", "hands": ["22", "33", "54s", "65s", "75s", "76s", "86s", "97s", "A6s", "A7s", "K8s", "K9s", "KJo", "Q9s", "T8s"]}]}, "lp": {"tiers": [{"cls": "play", "legend": "Raise", "tip": "Raise", "hands": ["22", "33", "44", "54s", "55", "65s", "66", "76s", "77", "87s", "88", "98s", "99", "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "AA", "AJo", "AJs", "AKo", "AKs", "AQo", "AQs", "ATo", "ATs", "J9s", "JJ", "JTs", "K8s", "K9s", "KJo", "KJs", "KK", "KQo", "KQs", "KTs", "Q9s", "QJs", "QQ", "QTs", "T9s", "TT"]}, {"cls": "cond", "legend": "Raise if the limpers are weak and give up after the flop", "tip": "Raise vs. weak limpers", "hands": ["86s", "97s", "A9o", "J8s", "JTo", "K4s", "K5s", "K6s", "K7s", "K9o", "KTo", "Q8s", "QJo", "QTo", "T8s"]}, {"cls": "cond limp", "legend": "Same, or limp behind when others have limped", "tip": "Raise vs. weak limpers, or limp behind", "hands": ["43s", "53s", "64s", "75s", "76o", "87o", "98o", "J9o", "T7s", "T9o"]}]}, "sb": {"tiers": [{"cls": "play", "legend": "Raise", "tip": "Raise", "hands": ["99", "AA", "AJs", "AKo", "AKs", "AQo", "AQs", "JJ", "KK", "KQo", "KQs", "QQ", "TT"]}, {"cls": "cond", "legend": "Raise if the limpers are weak", "tip": "Raise vs. weak limpers", "hands": ["77", "88", "AJo", "ATs", "JTs", "KJs", "QJs"]}, {"cls": "limp", "legend": "Complete (limp) for half a bet", "tip": "Complete the blind", "hands": ["22", "32o", "32s", "33", "42o", "42s", "43o", "43s", "44", "52o", "52s", "53o", "53s", "54o", "54s", "55", "62o", "62s", "63o", "63s", "64o", "64s", "65o", "65s", "66", "73o", "73s", "74o", "74s", "75o", "75s", "76o", "76s", "84o", "84s", "85o", "85s", "86o", "86s", "87o", "87s", "95o", "95s", "96o", "96s", "97o", "97s", "98o", "98s", "A2o", "A2s", "A3o", "A3s", "A4o", "A4s", "A5o", "A5s", "A6o", "A6s", "A7o", "A7s", "A8o", "A8s", "A9o", "A9s", "ATo", "J2s", "J3s", "J4s", "J5s", "J6s", "J7s", "J8o", "J8s", "J9o", "J9s", "JTo", "K2o", "K2s", "K3o", "K3s", "K4o", "K4s", "K5o", "K5s", "K6o", "K6s", "K7o", "K7s", "K8o", "K8s", "K9o", "K9s", "KJo", "KTo", "KTs", "Q2s", "Q3s", "Q4s", "Q5s", "Q6s", "Q7o", "Q7s", "Q8o", "Q8s", "Q9o", "Q9s", "QJo", "QTo", "QTs", "T2s", "T3s", "T4s", "T5s", "T6s", "T7o", "T7s", "T8o", "T8s", "T9o", "T9s"]}]}};
   var segs = document.getElementById('style-segs');
   var cells = document.querySelectorAll('table.range td[data-hand]');
   var descs = document.querySelectorAll('.style-desc');
   var SKEY = 'holdem-ref-position';
+  var TIER_CLASSES = ['play', 'cond', 'limp'];
+  var legend = document.getElementById('legend');
   function applyStyle(name) {
     if (!RANGES[name]) name = 'ep';
-    var play = {}, cond = {};
-    RANGES[name].raise.forEach(function (h) { play[h] = true; });
-    RANGES[name].cond.forEach(function (h) { cond[h] = true; });
+    var map = {};
+    RANGES[name].tiers.forEach(function (t) { t.hands.forEach(function (h) { map[h] = t; }); });
     cells.forEach(function (td) {
-      var h = td.getAttribute('data-hand');
-      td.classList.toggle('play', !!play[h]);
-      td.classList.toggle('cond', !!cond[h]);
+      var t = map[td.getAttribute('data-hand')];
+      TIER_CLASSES.forEach(function (c) { td.classList.remove(c); });
+      if (t) t.cls.split(' ').forEach(function (c) { td.classList.add(c); });
+      td.setAttribute('data-tip', t ? t.tip : 'Fold');
+      td.setAttribute('data-act', t ? t.cls : 'fold');
     });
+    legend.innerHTML = RANGES[name].tiers.map(function (t) {
+      return '<span><i class="swatch ' + t.cls + '"></i> ' + t.legend + '</span>';
+    }).join('') + '<span><i class="swatch off"></i> Fold</span>';
     segs.querySelectorAll('.seg').forEach(function (b) {
       var on = b.getAttribute('data-style') === name;
       b.classList.toggle('on', on);
@@ -404,10 +420,9 @@ img { max-width: 100%; }
     applyStyle(name);
     try { localStorage.setItem(SKEY, name); } catch (err) {}
   });
-  try {
-    var savedStyle = localStorage.getItem(SKEY);
-    if (savedStyle && RANGES[savedStyle]) applyStyle(savedStyle);
-  } catch (e) {}
+  var initial = 'ep';
+  try { var savedStyle = localStorage.getItem(SKEY); if (savedStyle && RANGES[savedStyle]) initial = savedStyle; } catch (e) {}
+  applyStyle(initial);
 
   // hover tooltip showing the two cards
   var tip = document.createElement('div');
@@ -442,8 +457,8 @@ img { max-width: 100%; }
   }
   function showTip(td) {
     var d = describe(td.getAttribute('data-hand'));
-    var act = td.classList.contains('play') ? 'play' : td.classList.contains('cond') ? 'cond' : 'fold';
-    var label = { play: 'Raise', cond: 'Raise vs. weak table', fold: 'Fold' }[act];
+    var act = td.getAttribute('data-act') || 'fold';
+    var label = td.getAttribute('data-tip') || 'Fold';
     placeTip(td, '<span class="hand">' + d.cards + '</span>' +
       '<span class="t-name">' + d.name + '</span>' +
       '<span class="t-act ' + act + '">' + label + '</span>', false);
